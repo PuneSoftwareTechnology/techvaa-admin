@@ -10,7 +10,7 @@ import type { UploadFolder } from "./upload-folders";
  * the AWS SDK resolves credentials from `~/.aws`; in production set
  * AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY.
  */
-export const S3_REGION = process.env.AWS_REGION ?? "ap-south-1";
+export const S3_REGION = process.env.REGION ?? "ap-south-1";
 export const S3_BUCKET = process.env.S3_BUCKET ?? "techvaa";
 
 /** Public base URL objects are served from (CloudFront-friendly override). */

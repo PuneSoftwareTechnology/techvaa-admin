@@ -1,0 +1,28 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # This app needs Node 24 (Prisma 7 + Next 16). Amplify's default image
+        # ships an older Node, so pin it explicitly via the preinstalled nvm.
+        - nvm install 24
+        - nvm use 24
+        - node -v
+        # Clean, lockfile-faithful install.
+        - npm ci
+        # Prisma 7 generates the client into src/generated/prisma, which is
+        # gitignored — regenerate it on every build or the compile fails.
+        - npx prisma generate
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    # Next.js SSR output. Amplify detects the SSR (WEB_COMPUTE) build and
+    # deploys the server compute + static assets from here.
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

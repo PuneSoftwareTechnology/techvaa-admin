@@ -1,0 +1,369 @@
+// Techvaa — SAP Training Institute platform
+// Prisma 7 schema. Uses the new `prisma-client` generator (the legacy
+// `prisma-client-js` generator is deprecated in v7) and a driver adapter at
+// runtime (Prisma 7 removed the bundled Rust query engine).
+//
+// Conventions:
+//   - CUID primary keys (application-generated, collision-resistant, URL-safe).
+//   - createdAt / updatedAt on every major table.
+//   - `deletedAt` soft-delete column on user-facing content tables. Soft delete
+//     is a convention: queries must filter `where: { deletedAt: null }`.
+//   - Slugs and emails are uniquely constrained; hot read paths are indexed.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  runtime      = "nodejs"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Prisma 7 no longer allows `url` here. The connection string lives in `.env`
+  // under the key `DATABASE` and is wired in via `prisma.config.ts`
+  // (datasource.url) for CLI commands. The runtime client gets it through the
+  // driver adapter in src/lib/prisma.ts.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MARKETING_EXECUTIVE
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+  LOST
+}
+
+// Maps to the X-Robots / <meta name="robots"> directive for a page.
+enum RobotsDirective {
+  INDEX_FOLLOW
+  NOINDEX_FOLLOW
+  INDEX_NOFOLLOW
+  NOINDEX_NOFOLLOW
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth / Admin
+// ─────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String // bcrypt hash — never store plaintext
+  role        UserRole  @default(MARKETING_EXECUTIVE)
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  // A user can upload many media assets. Kept (SetNull) if the user is removed.
+  media Media[]
+
+  @@index([role])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Courses
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Course {
+  id               String      @id @default(cuid())
+  title            String
+  slug             String      @unique
+  shortDescription String?
+  description      String // long-form (HTML / markdown)
+  duration         String? // e.g. "6 weeks", "40 hours"
+  level            CourseLevel @default(ALL_LEVELS)
+  price            Decimal?    @db.Decimal(10, 2)
+  image            String?
+  isFeatured       Boolean     @default(false)
+  isPublished      Boolean     @default(false)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  deletedAt        DateTime?
+
+  // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
+  seo SeoMetadata?
+
+  // FAQs attached to this course (shown on the course detail page).
+  faqs Faq[] @relation("CourseFaqs")
+
+  @@index([isPublished, isFeatured])
+  @@index([level])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("courses")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Blog
+// ─────────────────────────────────────────────────────────────────────────────
+
+model BlogCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  blogs Blog[]
+
+  @@index([deletedAt])
+  @@map("blog_categories")
+}
+
+model Blog {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String?
+  content       String // long-form (HTML / markdown)
+  featuredImage String?
+  readingTime   Int? // estimated minutes
+  isPublished   Boolean   @default(false)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  categoryId String
+  category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
+  seo SeoMetadata?
+
+  @@index([categoryId])
+  @@index([isPublished, publishedAt])
+  @@index([publishedAt])
+  @@index([deletedAt])
+  @@map("blogs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Social proof: Reviews / Testimonials / Placements
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Review {
+  id          String    @id @default(cuid())
+  studentName String
+  company     String?
+  designation String?
+  rating      Int // 1–5, enforced by a CHECK constraint in the migration
+  review      String
+  image       String?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([isPublished])
+  @@index([rating])
+  @@index([deletedAt])
+  @@map("reviews")
+}
+
+model Testimonial {
+  id          String    @id @default(cuid())
+  name        String
+  role        String?
+  company     String?
+  message     String
+  image       String?
+  videoUrl    String?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([isPublished])
+  @@index([deletedAt])
+  @@map("testimonials")
+}
+
+model Placement {
+  id          String    @id @default(cuid())
+  studentName String
+  company     String
+  package     String? // CTC, kept as text to allow "12 LPA", "$90k", ranges
+  course      String?
+  image       String?
+  linkedinUrl String?
+  joiningDate DateTime?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([isPublished])
+  @@index([company])
+  @@index([joiningDate])
+  @@index([deletedAt])
+  @@map("placements")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FAQs
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Faq {
+  id             String    @id @default(cuid())
+  question       String
+  answer         String
+  sortOrder      Int       @default(0)
+  isPublished    Boolean   @default(true)
+  // When true, the FAQ appears in the homepage FAQ section.
+  showOnHomepage Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  // Courses this FAQ is attached to. An FAQ shows on a course page when that
+  // course is in this set; homepage placement is controlled by showOnHomepage.
+  courses Course[] @relation("CourseFaqs")
+
+  @@index([isPublished, sortOrder])
+  @@index([showOnHomepage])
+  @@index([deletedAt])
+  @@map("faqs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Leads (CRM capture)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Lead {
+  id             String     @id @default(cuid())
+  name           String
+  email          String
+  phone          String?
+  message        String?
+  courseInterest String?
+  status         LeadStatus @default(NEW)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Course enquiries — "Enroll Now" captures from the upcoming-batches table.
+// Distinct from Lead: the course is pre-selected from the batch row and no
+// email is collected (name + phone + message only). Reuses LeadStatus so the
+// admin can triage enquiries with the same lifecycle.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CourseEnquiry {
+  id        String     @id @default(cuid())
+  name      String
+  phone     String
+  course    String // the batch / course the visitor is enrolling for
+  message   String?
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("course_enquiries")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Media library (S3-backed)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Media {
+  id           String   @id @default(cuid())
+  fileName     String // stored / S3 object key
+  originalName String
+  fileType     String // MIME type, e.g. image/png
+  fileSize     Int // bytes
+  url          String
+  createdAt    DateTime @default(now())
+
+  uploadedById String?
+  uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([uploadedById])
+  @@index([fileType])
+  @@index([createdAt])
+  @@map("media")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SEO metadata — optional 1:1 with Course OR Blog (one row per attached entity)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model SeoMetadata {
+  id              String          @id @default(cuid())
+  metaTitle       String?
+  metaDescription String?
+  canonicalUrl    String?
+  keywords        String[]        @default([]) // Postgres text[] — clean array storage
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  robots          RobotsDirective @default(INDEX_FOLLOW)
+  schemaMarkup    Json?           @db.JsonB // JSON-LD structured data
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Exactly one of these is expected to be set per row. Each is unique so the
+  // relation is strictly one-to-one. Cascade keeps SEO rows from orphaning.
+  courseId String? @unique
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  blogId String? @unique
+  blog   Blog?   @relation(fields: [blogId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("seo_metadata")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Page SEO — metadata for the site's FIXED pages (Home, Courses list, Blog
+// list, Placements, Contact, …). Distinct from SeoMetadata, which is per-entity
+// (1:1 with a Course/Blog). These are finite and keyed by URL path, so the
+// admin manages them as a small list. Per-course/blog meta keeps living on
+// SeoMetadata with content-derived fallbacks.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PageSeo {
+  id              String          @id @default(cuid())
+  page            String // human label, e.g. "Home"
+  path            String          @unique // route path, e.g. "/" or "/courses"
+  metaTitle       String
+  metaDescription String
+  keywords        String[]        @default([])
+  canonicalUrl    String?
+  ogImage         String?
+  robots          RobotsDirective @default(INDEX_FOLLOW)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("page_seo")
+}

@@ -15,6 +15,12 @@ frontend:
         - npx prisma generate
     build:
       commands:
+        # Amplify passes console env vars to the BUILD but NOT to the SSR
+        # runtime (Lambda). Write the server-only vars into .env.production so
+        # they ship inside the deployment bundle and process.env can read them
+        # at runtime. (NEXT_PUBLIC_* are inlined at build, so they're not needed
+        # here.)
+        - env | grep -E '^(DATABASE|AUTH_SECRET|REGION|S3_BUCKET)=' >> .env.production || true
         - npm run build
   artifacts:
     # Next.js SSR output. Amplify detects the SSR (WEB_COMPUTE) build and

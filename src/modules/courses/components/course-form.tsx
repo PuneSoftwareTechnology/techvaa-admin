@@ -73,25 +73,20 @@ export function CourseForm({ formId, defaultValues, onSubmit }: CourseFormProps)
         <Textarea id="description" rows={5} {...register('description')} />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Level" error={errors.level?.message}>
-          <Select value={watch('level')} onValueChange={(v) => setValue('level', v as CourseFormValues['level'])}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {COURSE_LEVELS.map((lvl) => (
-                <SelectItem key={lvl} value={lvl}>
-                  {humanizeEnum(lvl)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-        <Field label="Price (₹)" htmlFor="price" error={errors.price?.message}>
-          <Input id="price" {...register('price')} />
-        </Field>
-      </div>
+      <Field label="Level" error={errors.level?.message}>
+        <Select value={watch('level')} onValueChange={(v) => setValue('level', v as CourseFormValues['level'])}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {COURSE_LEVELS.map((lvl) => (
+              <SelectItem key={lvl} value={lvl}>
+                {humanizeEnum(lvl)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
 
       <Field label="Course image" error={errors.image?.message}>
         <ImageUpload

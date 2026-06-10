@@ -112,7 +112,8 @@ export const GRANTABLE_PERMISSIONS: PermissionMeta[] = PERMISSIONS.map(
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   SUPER_ADMIN: [...PERMISSIONS],
   ADMIN: ['courseEnquiries', 'blogs', 'batchScheduleHome', 'batchScheduleCourse'],
-  MARKETING_EXECUTIVE: ['blogs'],
+  CONTENT_MANAGER: ['courses', 'blogs', 'categories', 'faqs', 'reviews', 'placements', 'media'],
+  SEO_MANAGER: ['seo'],
 }
 
 /** The only role that bypasses per-route checks and owns credential management. */

@@ -32,7 +32,8 @@ datasource db {
 enum UserRole {
   SUPER_ADMIN
   ADMIN
-  MARKETING_EXECUTIVE
+  CONTENT_MANAGER
+  SEO_MANAGER
 }
 
 enum CourseLevel {
@@ -67,7 +68,7 @@ model User {
   name        String
   email       String    @unique
   password    String // bcrypt hash — never store plaintext
-  role        UserRole  @default(MARKETING_EXECUTIVE)
+  role        UserRole  @default(CONTENT_MANAGER)
   isActive    Boolean   @default(true)
   lastLoginAt DateTime?
   createdAt   DateTime  @default(now())
@@ -95,7 +96,6 @@ model Course {
   description      String // long-form (HTML / markdown)
   duration         String? // e.g. "6 weeks", "40 hours"
   level            CourseLevel @default(ALL_LEVELS)
-  price            Decimal?    @db.Decimal(10, 2)
   image            String?
   isFeatured       Boolean     @default(false)
   isPublished      Boolean     @default(false)

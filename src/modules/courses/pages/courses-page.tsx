@@ -59,11 +59,6 @@ export default function CoursesPage() {
       ),
     },
     {
-      id: 'price',
-      header: 'Price',
-      cell: (course) => (course.price ? `₹${course.price}` : '—'),
-    },
-    {
       id: 'status',
       header: 'Status',
       cell: (course) => <PublishBadge published={course.isPublished} />,
@@ -155,7 +150,6 @@ export default function CoursesPage() {
                   description: c.editing.description,
                   duration: c.editing.duration ?? '',
                   level: c.editing.level,
-                  price: c.editing.price ?? '',
                   image: c.editing.image ?? '',
                   isFeatured: c.editing.isFeatured,
                   isPublished: c.editing.isPublished,

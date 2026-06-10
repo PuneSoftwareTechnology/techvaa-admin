@@ -7,7 +7,7 @@
 export type ISODateString = string
 
 // ── Enums ────────────────────────────────────────────────────────────────
-export const USER_ROLES = ['SUPER_ADMIN', 'ADMIN', 'MARKETING_EXECUTIVE'] as const
+export const USER_ROLES = ['SUPER_ADMIN', 'ADMIN', 'CONTENT_MANAGER', 'SEO_MANAGER'] as const
 export type UserRole = (typeof USER_ROLES)[number]
 
 /**
@@ -100,7 +100,6 @@ export interface Course extends Timestamps {
   description: string
   duration?: string | null
   level: CourseLevel
-  price?: string | null
   image?: string | null
   isFeatured: boolean
   isPublished: boolean

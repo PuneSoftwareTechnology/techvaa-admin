@@ -92,12 +92,11 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       "description",
       "duration",
       "level",
-      "price",
       "image",
       "isFeatured",
       "isPublished",
     ],
-    nullableBlanks: ["shortDescription", "duration", "price", "image"],
+    nullableBlanks: ["shortDescription", "duration", "image"],
     include: { seo: true },
     seoRelation: true,
     filters: {

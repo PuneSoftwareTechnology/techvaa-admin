@@ -36,13 +36,6 @@ enum UserRole {
   SEO_MANAGER
 }
 
-enum CourseLevel {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-  ALL_LEVELS
-}
-
 enum LeadStatus {
   NEW
   CONTACTED
@@ -89,19 +82,19 @@ model User {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Course {
-  id               String      @id @default(cuid())
-  title            String
-  slug             String      @unique
-  shortDescription String?
-  description      String // long-form (HTML / markdown)
-  duration         String? // e.g. "6 weeks", "40 hours"
-  level            CourseLevel @default(ALL_LEVELS)
-  image            String?
-  isFeatured       Boolean     @default(false)
-  isPublished      Boolean     @default(false)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  deletedAt        DateTime?
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  description   String // long-form (HTML / markdown)
+  intro         String[] @default([]) // bullet points — course introduction
+  modules       String[] @default([]) // bullet points — course modules / curriculum
+  prerequisites String[] @default([]) // bullet points — prerequisites
+  image         String?
+  isFeatured    Boolean  @default(false)
+  isPublished   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
 
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
@@ -109,8 +102,16 @@ model Course {
   // FAQs attached to this course (shown on the course detail page).
   faqs Faq[] @relation("CourseFaqs")
 
+  // Blogs that link back to this course (Blog.relatedCourse).
+  relatedBlogs Blog[] @relation("BlogRelatedCourse")
+
+  // Self many-to-many: other courses surfaced as "related" on the detail page.
+  // `relatedCourses` is the curated set this course points at; `relatedFrom`
+  // is the inverse. Implicit join table _RelatedCourses.
+  relatedCourses Course[] @relation("RelatedCourses")
+  relatedFrom    Course[] @relation("RelatedCourses")
+
   @@index([isPublished, isFeatured])
-  @@index([level])
   @@index([createdAt])
   @@index([deletedAt])
   @@map("courses")
@@ -136,28 +137,55 @@ model BlogCategory {
 }
 
 model Blog {
-  id            String    @id @default(cuid())
-  title         String
-  slug          String    @unique
-  excerpt       String?
-  content       String // long-form (HTML / markdown)
-  featuredImage String?
-  readingTime   Int? // estimated minutes
-  isPublished   Boolean   @default(false)
-  publishedAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  metaDescription String? // short SEO/summary line shown on cards & meta tags
+  featuredImage   String?
+  introduction    String // lede paragraph
+
+  // Primary content block
+  primaryTitle String?
+  primaryIntro String?
+  primaryImage String?
+  primaryText  String?
+
+  // Secondary content block
+  secondaryTitle String?
+  secondaryIntro String?
+  secondaryImage String?
+  secondaryText  String?
+
+  // Tertiary content block (the only block with bullet points)
+  tertiaryTitle  String?
+  tertiaryIntro  String?
+  tertiaryImage  String?
+  tertiaryText   String?
+  tertiaryPoints String[] // "Add bullet point" list
+
+  conclusion String?
+
+  showOnHomepage Boolean   @default(false)
+  isPublished    Boolean   @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
 
   categoryId String
   category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  relatedCourseId String?
+  relatedCourse   Course? @relation("BlogRelatedCourse", fields: [relatedCourseId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
 
   @@index([categoryId])
+  @@index([relatedCourseId])
   @@index([isPublished, publishedAt])
   @@index([publishedAt])
+  @@index([showOnHomepage])
   @@index([deletedAt])
   @@map("blogs")
 }

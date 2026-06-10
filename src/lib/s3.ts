@@ -21,6 +21,12 @@ const PUBLIC_BASE =
 // Reuse a single client across hot reloads in development.
 const globalForS3 = globalThis as unknown as { s3: S3Client | undefined };
 
+// Accept either the standard AWS_* names or the shorter ACCESS_KEY/SECRET_KEY
+// pair used in our .env files.
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID ?? process.env.ACCESS_KEY;
+const secretAccessKey =
+  process.env.AWS_SECRET_ACCESS_KEY ?? process.env.SECRET_KEY;
+
 export const s3 =
   globalForS3.s3 ??
   new S3Client({
@@ -28,11 +34,8 @@ export const s3 =
     // Explicit keys take precedence; otherwise fall back to the default
     // provider chain (env / shared ~/.aws credentials / IAM role).
     credentials:
-      process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
-        ? {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          }
+      accessKeyId && secretAccessKey
+        ? { accessKeyId, secretAccessKey }
         : undefined,
   });
 

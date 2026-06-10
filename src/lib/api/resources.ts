@@ -70,37 +70,41 @@ const LEAD_STATUS_VALUES = [
   "CLOSED",
   "LOST",
 ] as const;
-const COURSE_LEVEL_VALUES = [
-  "BEGINNER",
-  "INTERMEDIATE",
-  "ADVANCED",
-  "ALL_LEVELS",
-] as const;
 
 export const RESOURCES: Record<string, ResourceConfig> = {
   courses: {
     model: "course",
     label: "Course",
-    searchable: ["title", "slug", "shortDescription"],
-    sortable: ["createdAt", "title", "level", "isPublished"],
+    searchable: ["title", "slug"],
+    sortable: ["createdAt", "title", "isPublished"],
     defaultSort: "createdAt",
     softDelete: true,
     writable: [
       "title",
       "slug",
-      "shortDescription",
       "description",
-      "duration",
-      "level",
+      "intro",
+      "modules",
+      "prerequisites",
       "image",
       "isFeatured",
       "isPublished",
     ],
-    nullableBlanks: ["shortDescription", "duration", "image"],
-    include: { seo: true },
+    nullableBlanks: ["image"],
+    include: {
+      seo: true,
+      relatedCourses: { select: { id: true, title: true, slug: true } },
+    },
     seoRelation: true,
+    // Curated related courses (self m2m), written from the form's id array.
+    relations: { relatedCourses: "relatedCourseIds" },
+    // Expose the related course ids as a flat array for the form's multi-select.
+    transform: (row) => {
+      const related =
+        (row.relatedCourses as { id: string }[] | undefined) ?? [];
+      return { ...row, relatedCourseIds: related.map((c) => c.id) };
+    },
     filters: {
-      level: { kind: "enum", values: COURSE_LEVEL_VALUES },
       isPublished: { kind: "boolean" },
       isFeatured: { kind: "boolean" },
     },

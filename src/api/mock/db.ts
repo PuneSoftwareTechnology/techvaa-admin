@@ -30,11 +30,11 @@ import {
 export const mockDb = {
   courses: new MockCollection<Course>(COURSE_SEED, {
     idPrefix: 'crs',
-    searchFields: ['title', 'slug', 'shortDescription'],
+    searchFields: ['title', 'slug'],
   }),
   blogs: new MockCollection<Blog>(BLOG_SEED, {
     idPrefix: 'blg',
-    searchFields: ['title', 'slug', 'excerpt'],
+    searchFields: ['title', 'slug', 'metaDescription', 'introduction'],
   }),
   categories: new MockCollection<BlogCategory>(CATEGORY_SEED, {
     idPrefix: 'cat',

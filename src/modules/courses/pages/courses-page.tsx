@@ -2,24 +2,17 @@ import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
 import { DataTableToolbar } from '@/components/data/data-table-toolbar'
 import { DataTablePagination } from '@/components/data/data-table-pagination'
 import { RowActions } from '@/components/data/row-actions'
 import { FormDialog } from '@/components/data/form-dialog'
 import { ConfirmDialog } from '@/components/data/confirm-dialog'
-import { PublishBadge, CourseLevelBadge } from '@/components/common/badges'
+import { PublishBadge } from '@/components/common/badges'
 import { Badge } from '@/components/ui/badge'
-import { formatDate, humanizeEnum } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { useCrudController } from '@/hooks/use-crud-controller'
-import { COURSE_LEVELS, type Course } from '@/types/domain'
+import { type Course } from '@/types/domain'
 import { seoToFormValues } from '@/modules/seo/validations/entity-seo.schema'
 import { courseHooks } from '../hooks/use-courses'
 import { CourseForm } from '../components/course-form'
@@ -44,18 +37,6 @@ export default function CoursesPage() {
           <span className="font-medium text-foreground">{course.title}</span>
           {course.isFeatured && <Badge variant="warning">Featured</Badge>}
         </div>
-      ),
-    },
-    {
-      id: 'level',
-      header: 'Level',
-      cell: (course) => <CourseLevelBadge level={course.level} />,
-    },
-    {
-      id: 'duration',
-      header: 'Duration',
-      cell: (course) => (
-        <span className="text-muted-foreground">{course.duration ?? '—'}</span>
       ),
     },
     {
@@ -90,24 +71,6 @@ export default function CoursesPage() {
         search={c.table.search}
         onSearchChange={c.table.setSearch}
         searchPlaceholder="Search courses…"
-        filters={
-          <Select
-            value={(c.table.filters.level as string) ?? 'all'}
-            onValueChange={(v) => c.table.setFilter('level', v === 'all' ? undefined : v)}
-          >
-            <SelectTrigger size="sm" className="w-40">
-              <SelectValue placeholder="All levels" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All levels</SelectItem>
-              {COURSE_LEVELS.map((lvl) => (
-                <SelectItem key={lvl} value={lvl}>
-                  {humanizeEnum(lvl)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        }
       />
 
       <DataTable
@@ -138,20 +101,22 @@ export default function CoursesPage() {
         formId={FORM_ID}
         isSubmitting={c.isSubmitting}
         submitLabel={c.editing ? 'Save changes' : 'Create course'}
+        className="max-h-[90svh] overflow-y-auto sm:max-w-3xl"
       >
         <CourseForm
           formId={FORM_ID}
+          excludeId={c.editing?.id}
           defaultValues={
             c.editing
               ? {
                   title: c.editing.title,
                   slug: c.editing.slug,
-                  shortDescription: c.editing.shortDescription ?? '',
                   description: c.editing.description,
-                  duration: c.editing.duration ?? '',
-                  level: c.editing.level,
+                  intro: c.editing.intro ?? [],
+                  modules: c.editing.modules ?? [],
+                  prerequisites: c.editing.prerequisites ?? [],
+                  relatedCourseIds: c.editing.relatedCourseIds ?? [],
                   image: c.editing.image ?? '',
-                  isFeatured: c.editing.isFeatured,
                   isPublished: c.editing.isPublished,
                   seo: seoToFormValues(c.editing.seo),
                 }

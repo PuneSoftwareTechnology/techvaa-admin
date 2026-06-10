@@ -13,7 +13,6 @@ import { PublishBadge } from '@/components/common/badges'
 import { formatDate } from '@/lib/format'
 import { useCrudController } from '@/hooks/use-crud-controller'
 import type { Blog } from '@/types/domain'
-import { seoToFormValues } from '@/modules/seo/validations/entity-seo.schema'
 import { blogHooks } from '../hooks/use-blogs'
 import { BlogForm } from '../components/blog-form'
 import { BLOG_DEFAULTS } from '../validations/blog.schema'
@@ -35,8 +34,10 @@ export default function BlogsPage() {
       cell: (b) => (
         <div className="max-w-md">
           <p className="truncate font-medium text-foreground">{b.title}</p>
-          {b.excerpt && (
-            <p className="line-clamp-1 text-xs text-muted-foreground">{b.excerpt}</p>
+          {(b.metaDescription ?? b.introduction) && (
+            <p className="line-clamp-1 text-xs text-muted-foreground">
+              {b.metaDescription ?? b.introduction}
+            </p>
           )}
         </div>
       ),
@@ -117,13 +118,27 @@ export default function BlogsPage() {
               ? {
                   title: c.editing.title,
                   slug: c.editing.slug,
-                  excerpt: c.editing.excerpt ?? '',
-                  content: c.editing.content,
+                  metaDescription: c.editing.metaDescription ?? '',
                   featuredImage: c.editing.featuredImage ?? '',
+                  introduction: c.editing.introduction,
+                  primaryTitle: c.editing.primaryTitle ?? '',
+                  primaryIntro: c.editing.primaryIntro ?? '',
+                  primaryImage: c.editing.primaryImage ?? '',
+                  primaryText: c.editing.primaryText ?? '',
+                  secondaryTitle: c.editing.secondaryTitle ?? '',
+                  secondaryIntro: c.editing.secondaryIntro ?? '',
+                  secondaryImage: c.editing.secondaryImage ?? '',
+                  secondaryText: c.editing.secondaryText ?? '',
+                  tertiaryTitle: c.editing.tertiaryTitle ?? '',
+                  tertiaryIntro: c.editing.tertiaryIntro ?? '',
+                  tertiaryImage: c.editing.tertiaryImage ?? '',
+                  tertiaryText: c.editing.tertiaryText ?? '',
+                  tertiaryPoints: c.editing.tertiaryPoints ?? [],
+                  conclusion: c.editing.conclusion ?? '',
                   categoryId: c.editing.categoryId,
-                  readingTime: c.editing.readingTime ?? undefined,
+                  relatedCourseId: c.editing.relatedCourseId ?? '',
+                  showOnHomepage: c.editing.showOnHomepage,
                   isPublished: c.editing.isPublished,
-                  seo: seoToFormValues(c.editing.seo),
                 }
               : undefined
           }

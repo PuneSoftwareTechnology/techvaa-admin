@@ -1,20 +1,43 @@
 import { z } from 'zod'
 
-import {
-  entitySeoSchema,
-  ENTITY_SEO_DEFAULTS,
-} from '@/modules/seo/validations/entity-seo.schema'
+const optionalText = z.string().optional().or(z.literal(''))
+const optionalImage = z.string().url('Enter a valid URL').optional().or(z.literal(''))
 
 export const blogSchema = z.object({
   title: z.string().min(3, 'Title is required'),
-  slug: z.string().min(3, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and hyphens only'),
-  excerpt: z.string().max(280, 'Keep it under 280 characters').optional().or(z.literal('')),
-  content: z.string().min(20, 'Content is required'),
-  featuredImage: z.string().url('Enter a valid URL').optional().or(z.literal('')),
+  slug: z
+    .string()
+    .min(3, 'Slug is required')
+    .regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and hyphens only'),
+  metaDescription: z.string().max(160, 'Keep it under 160 characters').optional().or(z.literal('')),
+  featuredImage: optionalImage,
+  introduction: z.string().min(20, 'Introduction is required'),
+
+  // Primary content block
+  primaryTitle: optionalText,
+  primaryIntro: optionalText,
+  primaryImage: optionalImage,
+  primaryText: optionalText,
+
+  // Secondary content block
+  secondaryTitle: optionalText,
+  secondaryIntro: optionalText,
+  secondaryImage: optionalImage,
+  secondaryText: optionalText,
+
+  // Tertiary content block
+  tertiaryTitle: optionalText,
+  tertiaryIntro: optionalText,
+  tertiaryImage: optionalImage,
+  tertiaryText: optionalText,
+  tertiaryPoints: z.array(z.string().min(1)),
+
+  conclusion: optionalText,
+
   categoryId: z.string().min(1, 'Select a category'),
-  readingTime: z.number().int().min(1).optional(),
+  relatedCourseId: z.string().optional().or(z.literal('')),
+  showOnHomepage: z.boolean(),
   isPublished: z.boolean(),
-  seo: entitySeoSchema.optional(),
 })
 
 export type BlogFormValues = z.infer<typeof blogSchema>
@@ -22,11 +45,25 @@ export type BlogFormValues = z.infer<typeof blogSchema>
 export const BLOG_DEFAULTS: BlogFormValues = {
   title: '',
   slug: '',
-  excerpt: '',
-  content: '',
+  metaDescription: '',
   featuredImage: '',
+  introduction: '',
+  primaryTitle: '',
+  primaryIntro: '',
+  primaryImage: '',
+  primaryText: '',
+  secondaryTitle: '',
+  secondaryIntro: '',
+  secondaryImage: '',
+  secondaryText: '',
+  tertiaryTitle: '',
+  tertiaryIntro: '',
+  tertiaryImage: '',
+  tertiaryText: '',
+  tertiaryPoints: [],
+  conclusion: '',
   categoryId: '',
-  readingTime: undefined,
+  relatedCourseId: '',
+  showOnHomepage: false,
   isPublished: false,
-  seo: ENTITY_SEO_DEFAULTS,
 }

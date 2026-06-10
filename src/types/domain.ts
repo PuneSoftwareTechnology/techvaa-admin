@@ -35,14 +35,6 @@ export const PERMISSIONS = [
 ] as const
 export type Permission = (typeof PERMISSIONS)[number]
 
-export const COURSE_LEVELS = [
-  'BEGINNER',
-  'INTERMEDIATE',
-  'ADVANCED',
-  'ALL_LEVELS',
-] as const
-export type CourseLevel = (typeof COURSE_LEVELS)[number]
-
 export const LEAD_STATUSES = [
   'NEW',
   'CONTACTED',
@@ -96,13 +88,20 @@ export interface Course extends Timestamps {
   id: string
   title: string
   slug: string
-  shortDescription?: string | null
   description: string
-  duration?: string | null
-  level: CourseLevel
+  /** Bullet-point course introduction. */
+  intro: string[]
+  /** Bullet-point list of modules / curriculum. */
+  modules: string[]
+  /** Bullet-point list of prerequisites. */
+  prerequisites: string[]
   image?: string | null
   isFeatured: boolean
   isPublished: boolean
+  /** Curated related courses (included on reads). */
+  relatedCourses?: Pick<Course, 'id' | 'title' | 'slug'>[]
+  /** Flattened related-course ids (derived server-side for the form). */
+  relatedCourseIds?: string[]
   seo?: SeoMetadata | null
 }
 
@@ -118,14 +117,35 @@ export interface Blog extends Timestamps {
   id: string
   title: string
   slug: string
-  excerpt?: string | null
-  content: string
+  metaDescription?: string | null
   featuredImage?: string | null
-  readingTime?: number | null
+  introduction: string
+
+  primaryTitle?: string | null
+  primaryIntro?: string | null
+  primaryImage?: string | null
+  primaryText?: string | null
+
+  secondaryTitle?: string | null
+  secondaryIntro?: string | null
+  secondaryImage?: string | null
+  secondaryText?: string | null
+
+  tertiaryTitle?: string | null
+  tertiaryIntro?: string | null
+  tertiaryImage?: string | null
+  tertiaryText?: string | null
+  tertiaryPoints: string[]
+
+  conclusion?: string | null
+
+  showOnHomepage: boolean
   isPublished: boolean
   publishedAt?: ISODateString | null
   categoryId: string
   category?: Pick<BlogCategory, 'id' | 'name' | 'slug'> | null
+  relatedCourseId?: string | null
+  relatedCourse?: Pick<Course, 'id' | 'title' | 'slug'> | null
   seo?: SeoMetadata | null
 }
 

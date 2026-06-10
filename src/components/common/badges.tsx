@@ -3,11 +3,7 @@ import { StarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { humanizeEnum } from '@/lib/format'
 import { Badge } from '@/components/ui/badge'
-import type {
-  CourseLevel,
-  LeadStatus,
-  RobotsDirective,
-} from '@/types/domain'
+import type { LeadStatus, RobotsDirective } from '@/types/domain'
 
 export function PublishBadge({ published }: { published: boolean }) {
   return (
@@ -32,10 +28,6 @@ export function LeadStatusBadge({ status }: { status: LeadStatus }) {
   return (
     <Badge variant={LEAD_STATUS_VARIANT[status]}>{humanizeEnum(status)}</Badge>
   )
-}
-
-export function CourseLevelBadge({ level }: { level: CourseLevel }) {
-  return <Badge variant="outline">{humanizeEnum(level)}</Badge>
 }
 
 export function RobotsBadge({ robots }: { robots: RobotsDirective }) {

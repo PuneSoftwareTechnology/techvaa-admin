@@ -21,6 +21,8 @@ interface EntitySeoSectionProps {
   errors: FieldErrors<any>
   robots: EntitySeoValues['robots']
   onRobotsChange: (value: EntitySeoValues['robots']) => void
+  /** Hide the meta-description field when the parent form surfaces it elsewhere. */
+  hideMetaDescription?: boolean
 }
 
 /**
@@ -33,6 +35,7 @@ export function EntitySeoSection({
   errors,
   robots,
   onRobotsChange,
+  hideMetaDescription = false,
 }: EntitySeoSectionProps) {
   const seoErrors = (errors.seo ?? {}) as Record<
     string,
@@ -54,13 +57,15 @@ export function EntitySeoSection({
         <Input id="seo-metaTitle" {...register('seo.metaTitle')} />
       </Field>
 
-      <Field
-        label="Meta description"
-        htmlFor="seo-metaDescription"
-        error={seoErrors.metaDescription?.message}
-      >
-        <Textarea id="seo-metaDescription" rows={3} {...register('seo.metaDescription')} />
-      </Field>
+      {!hideMetaDescription && (
+        <Field
+          label="Meta description"
+          htmlFor="seo-metaDescription"
+          error={seoErrors.metaDescription?.message}
+        >
+          <Textarea id="seo-metaDescription" rows={3} {...register('seo.metaDescription')} />
+        </Field>
+      )}
 
       <Field
         label="Keywords"

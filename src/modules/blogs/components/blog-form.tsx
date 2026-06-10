@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { categoryHooks } from '@/modules/categories/hooks/use-categories'
 import { courseHooks } from '@/modules/courses/hooks/use-courses'
 import { ImageUpload } from '@/components/forms/image-upload'
 import {
@@ -41,7 +40,6 @@ const CONTENT_BLOCKS = [
 
 export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
   const slugDirty = useRef(!!defaultValues)
-  const { data: categories } = categoryHooks.useList({ pageSize: 100 })
   const { data: courses } = courseHooks.useList({ pageSize: 100 })
   const {
     register,
@@ -72,25 +70,9 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
         />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Slug" htmlFor="slug" required error={errors.slug?.message}>
-          <Input id="slug" {...register('slug', { onChange: () => (slugDirty.current = true) })} />
-        </Field>
-        <Field label="Category" required error={errors.categoryId?.message}>
-          <Select value={watch('categoryId')} onValueChange={(v) => setValue('categoryId', v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories?.data.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-      </div>
+      <Field label="Slug" htmlFor="slug" required error={errors.slug?.message}>
+        <Input id="slug" {...register('slug', { onChange: () => (slugDirty.current = true) })} />
+      </Field>
 
       <Field
         label="Meta Description"

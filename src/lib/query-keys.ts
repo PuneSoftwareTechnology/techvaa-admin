@@ -22,11 +22,6 @@ export const queryKeys = {
     list: (params?: ListParams) => ['blogs', 'list', params ?? {}] as const,
     detail: (id: string) => ['blogs', 'detail', id] as const,
   },
-  categories: {
-    all: ['categories'] as const,
-    list: (params?: ListParams) => ['categories', 'list', params ?? {}] as const,
-    detail: (id: string) => ['categories', 'detail', id] as const,
-  },
   reviews: {
     all: ['reviews'] as const,
     list: (params?: ListParams) => ['reviews', 'list', params ?? {}] as const,

@@ -19,7 +19,6 @@ export const SEED_USERS: MockUser[] = [
       'courseEnquiries',
       'courses',
       'blogs',
-      'categories',
       'faqs',
       'reviews',
       'placements',
@@ -41,7 +40,7 @@ export const SEED_USERS: MockUser[] = [
     password: 'content123',
     role: 'CONTENT_MANAGER',
     // Role-derived access: a content manager handles site content modules.
-    permissions: ['courses', 'blogs', 'categories', 'faqs', 'reviews', 'placements', 'media'],
+    permissions: ['courses', 'blogs', 'faqs', 'reviews', 'placements', 'media'],
     isActive: true,
     lastLoginAt: null,
     createdAt: nowIso(),

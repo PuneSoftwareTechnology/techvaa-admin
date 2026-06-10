@@ -2,7 +2,6 @@ import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
 import { DataTableToolbar } from '@/components/data/data-table-toolbar'
 import { DataTablePagination } from '@/components/data/data-table-pagination'
@@ -41,11 +40,6 @@ export default function BlogsPage() {
           )}
         </div>
       ),
-    },
-    {
-      id: 'category',
-      header: 'Category',
-      cell: (b) => <Badge variant="ghost">{b.category?.name ?? '—'}</Badge>,
     },
     {
       id: 'status',
@@ -135,7 +129,6 @@ export default function BlogsPage() {
                   tertiaryText: c.editing.tertiaryText ?? '',
                   tertiaryPoints: c.editing.tertiaryPoints ?? [],
                   conclusion: c.editing.conclusion ?? '',
-                  categoryId: c.editing.categoryId,
                   relatedCourseId: c.editing.relatedCourseId ?? '',
                   showOnHomepage: c.editing.showOnHomepage,
                   isPublished: c.editing.isPublished,

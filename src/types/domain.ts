@@ -23,7 +23,6 @@ export const PERMISSIONS = [
   'courseEnquiries',
   'courses',
   'blogs',
-  'categories',
   'faqs',
   'reviews',
   'placements',
@@ -105,14 +104,6 @@ export interface Course extends Timestamps {
   seo?: SeoMetadata | null
 }
 
-export interface BlogCategory extends Timestamps {
-  id: string
-  name: string
-  slug: string
-  description?: string | null
-  blogCount?: number
-}
-
 export interface Blog extends Timestamps {
   id: string
   title: string
@@ -142,8 +133,6 @@ export interface Blog extends Timestamps {
   showOnHomepage: boolean
   isPublished: boolean
   publishedAt?: ISODateString | null
-  categoryId: string
-  category?: Pick<BlogCategory, 'id' | 'name' | 'slug'> | null
   relatedCourseId?: string | null
   relatedCourse?: Pick<Course, 'id' | 'title' | 'slug'> | null
   seo?: SeoMetadata | null

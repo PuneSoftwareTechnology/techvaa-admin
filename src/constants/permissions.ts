@@ -39,12 +39,6 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     description: 'Author and publish blog posts.',
     to: '/blogs',
   },
-  categories: {
-    key: 'categories',
-    label: 'Categories',
-    description: 'Organise blog categories.',
-    to: '/categories',
-  },
   faqs: {
     key: 'faqs',
     label: 'FAQs',
@@ -112,7 +106,7 @@ export const GRANTABLE_PERMISSIONS: PermissionMeta[] = PERMISSIONS.map(
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   SUPER_ADMIN: [...PERMISSIONS],
   ADMIN: ['courseEnquiries', 'blogs', 'batchScheduleHome', 'batchScheduleCourse'],
-  CONTENT_MANAGER: ['courses', 'blogs', 'categories', 'faqs', 'reviews', 'placements', 'media'],
+  CONTENT_MANAGER: ['courses', 'blogs', 'faqs', 'reviews', 'placements', 'media'],
   SEO_MANAGER: ['seo'],
 }
 

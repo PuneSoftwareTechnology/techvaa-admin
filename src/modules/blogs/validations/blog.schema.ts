@@ -34,7 +34,6 @@ export const blogSchema = z.object({
 
   conclusion: optionalText,
 
-  categoryId: z.string().min(1, 'Select a category'),
   relatedCourseId: z.string().optional().or(z.literal('')),
   showOnHomepage: z.boolean(),
   isPublished: z.boolean(),
@@ -62,7 +61,6 @@ export const BLOG_DEFAULTS: BlogFormValues = {
   tertiaryText: '',
   tertiaryPoints: [],
   conclusion: '',
-  categoryId: '',
   relatedCourseId: '',
   showOnHomepage: false,
   isPublished: false,

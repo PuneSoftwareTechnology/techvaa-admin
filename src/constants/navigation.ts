@@ -2,7 +2,6 @@ import {
   LayoutDashboard,
   GraduationCap,
   Newspaper,
-  FolderTree,
   Star,
   Briefcase,
   HelpCircle,
@@ -62,13 +61,6 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Newspaper,
     group: 'Content',
     permission: 'blogs',
-  },
-  {
-    title: 'Categories',
-    to: '/categories',
-    icon: FolderTree,
-    group: 'Content',
-    permission: 'categories',
   },
   {
     title: 'FAQs',

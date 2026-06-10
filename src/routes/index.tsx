@@ -14,9 +14,6 @@ const DashboardPage = lazy(
 )
 const CoursesPage = lazy(() => import('@/modules/courses/pages/courses-page'))
 const BlogsPage = lazy(() => import('@/modules/blogs/pages/blogs-page'))
-const CategoriesPage = lazy(
-  () => import('@/modules/categories/pages/categories-page'),
-)
 const ReviewsPage = lazy(() => import('@/modules/reviews/pages/reviews-page'))
 const PlacementsPage = lazy(
   () => import('@/modules/placements/pages/placements-page'),
@@ -60,14 +57,6 @@ export function AppRoutes() {
               element={
                 <RequirePermission permission="blogs">
                   <BlogsPage />
-                </RequirePermission>
-              }
-            />
-            <Route
-              path="categories"
-              element={
-                <RequirePermission permission="categories">
-                  <CategoriesPage />
                 </RequirePermission>
               }
             />

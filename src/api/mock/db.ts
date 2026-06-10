@@ -1,6 +1,5 @@
 import type {
   Blog,
-  BlogCategory,
   Course,
   CourseEnquiry,
   Faq,
@@ -13,7 +12,6 @@ import { MockCollection } from './collection'
 import { SEED_USERS, type MockUser } from './seed-users'
 import {
   BLOG_SEED,
-  CATEGORY_SEED,
   COURSE_ENQUIRY_SEED,
   COURSE_SEED,
   FAQ_SEED,
@@ -35,10 +33,6 @@ export const mockDb = {
   blogs: new MockCollection<Blog>(BLOG_SEED, {
     idPrefix: 'blg',
     searchFields: ['title', 'slug', 'metaDescription', 'introduction'],
-  }),
-  categories: new MockCollection<BlogCategory>(CATEGORY_SEED, {
-    idPrefix: 'cat',
-    searchFields: ['name', 'slug', 'description'],
   }),
   reviews: new MockCollection<Review>(REVIEW_SEED, {
     idPrefix: 'rev',

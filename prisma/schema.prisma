@@ -121,21 +121,6 @@ model Course {
 // Blog
 // ─────────────────────────────────────────────────────────────────────────────
 
-model BlogCategory {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  slug        String    @unique
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
-
-  blogs Blog[]
-
-  @@index([deletedAt])
-  @@map("blog_categories")
-}
-
 model Blog {
   id              String    @id @default(cuid())
   title           String
@@ -172,16 +157,12 @@ model Blog {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  categoryId String
-  category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-
   relatedCourseId String?
   relatedCourse   Course? @relation("BlogRelatedCourse", fields: [relatedCourseId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
 
-  @@index([categoryId])
   @@index([relatedCourseId])
   @@index([isPublished, publishedAt])
   @@index([publishedAt])

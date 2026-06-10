@@ -123,20 +123,17 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       "excerpt",
       "content",
       "featuredImage",
-      "categoryId",
       "readingTime",
       "isPublished",
     ],
     nullableBlanks: ["excerpt", "featuredImage"],
     coerce: { readingTime: "int" },
     include: {
-      category: { select: { id: true, name: true, slug: true } },
       seo: true,
     },
     seoRelation: true,
     filters: {
       isPublished: { kind: "boolean" },
-      categoryId: { kind: "eq" },
     },
     onWrite: (d) => {
       // Stamp publishedAt the first time a post is published.
@@ -144,24 +141,6 @@ export const RESOURCES: Record<string, ResourceConfig> = {
         d.publishedAt = new Date();
       }
       return d;
-    },
-  },
-
-  categories: {
-    model: "blogCategory",
-    label: "Category",
-    searchable: ["name", "slug"],
-    sortable: ["createdAt", "name"],
-    defaultSort: "createdAt",
-    softDelete: true,
-    writable: ["name", "slug", "description"],
-    nullableBlanks: ["description"],
-    include: { _count: { select: { blogs: true } } },
-    transform: (row) => {
-      const count = (row._count as { blogs?: number } | undefined)?.blogs ?? 0;
-      const { _count, ...rest } = row;
-      void _count;
-      return { ...rest, blogCount: count };
     },
   },
 

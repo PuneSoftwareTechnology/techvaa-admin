@@ -44,6 +44,13 @@ enum LeadStatus {
   LOST
 }
 
+// Enrollment state of a scheduled batch, surfaced as a badge on the site.
+enum BatchStatus {
+  ENROLLMENT_OPEN
+  LIMITED_SEATS
+  FILLING_FAST
+}
+
 // Maps to the X-Robots / <meta name="robots"> directive for a page.
 enum RobotsDirective {
   INDEX_FOLLOW
@@ -129,10 +136,9 @@ model CurriculumItem {
   course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   heading     String
   description String
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
+  sortOrder   Int    @default(0)
 
-  @@index([courseId])
+  @@index([courseId, sortOrder])
   @@map("curriculum_items")
 }
 
@@ -143,12 +149,13 @@ model CourseBatch {
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   startDate DateTime
   duration  String // e.g. "12 weeks"
-  isOpen    Boolean  @default(true) // enrollment open?
-  showOnHomepage Boolean @default(false) // also list on the home-page batches table
-  createdAt DateTime @default(now())
+  mode      String?     @default("Instructor Led Training") // delivery mode
+  timing    String? // e.g. "Weekdays 9–11 AM · Weekends 10 AM–12 PM"
+  status    BatchStatus @default(ENROLLMENT_OPEN)
+  isOpen    Boolean     @default(true) // enrollment open?
+  createdAt DateTime    @default(now())
 
   @@index([courseId, startDate])
-  @@index([showOnHomepage])
   @@map("course_batches")
 }
 

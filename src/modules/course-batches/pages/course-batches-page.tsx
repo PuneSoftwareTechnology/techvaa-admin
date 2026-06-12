@@ -13,12 +13,24 @@ import { ConfirmDialog } from '@/components/data/confirm-dialog'
 import { formatDate } from '@/lib/format'
 import { useCrudController } from '@/hooks/use-crud-controller'
 import { courseHooks } from '@/modules/courses/hooks/use-courses'
-import type { CourseBatch } from '@/types/domain'
+import type { BatchStatus, CourseBatch } from '@/types/domain'
 import { courseBatchHooks } from '../hooks/use-course-batches'
 import { CourseBatchForm } from '../components/course-batch-form'
 import { COURSE_BATCH_DEFAULTS } from '../validations/course-batch.schema'
 
 const FORM_ID = 'course-batch-form'
+
+const STATUS_LABEL: Record<BatchStatus, string> = {
+  ENROLLMENT_OPEN: 'Enrollment open',
+  LIMITED_SEATS: 'Limited seats',
+  FILLING_FAST: 'Filling fast',
+}
+
+const STATUS_VARIANT: Record<BatchStatus, 'success' | 'warning' | 'outline'> = {
+  ENROLLMENT_OPEN: 'success',
+  LIMITED_SEATS: 'warning',
+  FILLING_FAST: 'outline',
+}
 
 export default function CourseBatchesPage() {
   const c = useCrudController<
@@ -56,7 +68,23 @@ export default function CourseBatchesPage() {
       cell: (b) => <span className="text-muted-foreground">{b.duration}</span>,
     },
     {
+      id: 'timing',
+      header: 'Timing',
+      cell: (b) => (
+        <span className="text-muted-foreground">{b.timing ?? '—'}</span>
+      ),
+    },
+    {
       id: 'status',
+      header: 'Status',
+      cell: (b) => (
+        <Badge variant={STATUS_VARIANT[b.status]}>
+          {STATUS_LABEL[b.status]}
+        </Badge>
+      ),
+    },
+    {
+      id: 'enrolment',
       header: 'Enrolment',
       cell: (b) => (
         <Badge variant={b.isOpen ? 'success' : 'ghost'}>
@@ -64,23 +92,13 @@ export default function CourseBatchesPage() {
         </Badge>
       ),
     },
-    {
-      id: 'homepage',
-      header: 'Home page',
-      cell: (b) =>
-        b.showOnHomepage ? (
-          <Badge variant="outline">Featured</Badge>
-        ) : (
-          <span className="text-muted-foreground">—</span>
-        ),
-    },
   ]
 
   return (
     <div className="space-y-5">
       <PageHeader
         title="Batch Schedule"
-        description="Manage upcoming batches. Toggle “Show on home page” to feature one in the home-page table."
+        description="Manage upcoming batches, their schedule, delivery mode and enrolment status."
         actions={
           <Button onClick={c.openCreate}>
             <PlusIcon />
@@ -138,8 +156,10 @@ export default function CourseBatchesPage() {
                   courseId: c.editing.courseId,
                   startDate: c.editing.startDate.slice(0, 10),
                   duration: c.editing.duration,
+                  mode: c.editing.mode ?? '',
+                  timing: c.editing.timing ?? '',
+                  status: c.editing.status,
                   isOpen: c.editing.isOpen,
-                  showOnHomepage: c.editing.showOnHomepage,
                 }
               : COURSE_BATCH_DEFAULTS
           }

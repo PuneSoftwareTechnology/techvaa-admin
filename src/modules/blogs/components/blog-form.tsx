@@ -109,8 +109,6 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
           }
           invalid={!!errors.introduction}
           placeholder="Write the introduction…"
-          uploadFolder="blogs"
-          uploadSlug={slug}
         />
       </Field>
 
@@ -146,8 +144,6 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
               }
               invalid={!!errors[`${key}Text`]}
               placeholder={`Write the ${label.toLowerCase()} content…`}
-              uploadFolder="blogs"
-              uploadSlug={slug}
             />
           </Field>
 
@@ -195,8 +191,6 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
           }
           invalid={!!errors.conclusion}
           placeholder="Wrap up the article…"
-          uploadFolder="blogs"
-          uploadSlug={slug}
         />
       </Field>
 

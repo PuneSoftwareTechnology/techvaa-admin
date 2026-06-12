@@ -24,6 +24,12 @@ interface FormDialogProps {
   cancelLabel?: string
   isSubmitting?: boolean
   className?: string
+  /**
+   * Ignore implicit dismissals (Escape / click-outside) while true. Used by a
+   * dialog that hosts nested dialogs, so closing a child can't fall through and
+   * close this one too. Explicit close (Cancel / X / submit) still works.
+   */
+  lockClose?: boolean
 }
 
 /**
@@ -41,6 +47,7 @@ export function FormDialog({
   cancelLabel = 'Cancel',
   isSubmitting = false,
   className,
+  lockClose = false,
 }: FormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={(o) => !isSubmitting && onOpenChange(o)}>
@@ -49,6 +56,8 @@ export function FormDialog({
           'flex max-h-[90svh] flex-col overflow-hidden sm:max-w-2xl',
           className,
         )}
+        onEscapeKeyDown={lockClose ? (e) => e.preventDefault() : undefined}
+        onInteractOutside={lockClose ? (e) => e.preventDefault() : undefined}
       >
         <DialogHeader className="shrink-0">
           <DialogTitle>{title}</DialogTitle>

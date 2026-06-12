@@ -90,8 +90,6 @@ export function CourseForm({
               }
               invalid={!!errors.shortDescription}
               placeholder="Short blurb shown on course cards…"
-              uploadFolder="courses"
-              uploadSlug={watch('slug')}
             />
           </Field>
 
@@ -104,8 +102,6 @@ export function CourseForm({
               }
               invalid={!!errors.description}
               placeholder="Describe the course…"
-              uploadFolder="courses"
-              uploadSlug={watch('slug')}
             />
           </Field>
         </Section>

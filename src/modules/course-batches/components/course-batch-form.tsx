@@ -6,10 +6,18 @@ import { Field } from '@/components/forms/field'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { CourseSelect } from '@/components/forms/course-select'
 import {
   courseBatchSchema,
   COURSE_BATCH_DEFAULTS,
+  BATCH_STATUS_OPTIONS,
   type CourseBatchFormValues,
 } from '../validations/course-batch.schema'
 
@@ -63,6 +71,47 @@ export function CourseBatchForm({
         </Field>
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field
+          label="Mode"
+          htmlFor="mode"
+          hint="e.g. Instructor Led Training"
+          error={errors.mode?.message}
+        >
+          <Input id="mode" {...register('mode')} />
+        </Field>
+        <Field
+          label="Timing"
+          htmlFor="timing"
+          hint="e.g. Weekdays 9–11 AM"
+          error={errors.timing?.message}
+        >
+          <Input id="timing" {...register('timing')} />
+        </Field>
+      </div>
+
+      <Field label="Status" error={errors.status?.message}>
+        <Select
+          value={watch('status')}
+          onValueChange={(v) =>
+            setValue('status', v as CourseBatchFormValues['status'], {
+              shouldDirty: true,
+            })
+          }
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {BATCH_STATUS_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
+
       <div
         className={cn(
           'flex items-center justify-between rounded-lg border px-3 py-2 transition-colors',
@@ -81,27 +130,6 @@ export function CourseBatchForm({
           id="isOpen"
           checked={watch('isOpen')}
           onCheckedChange={(v) => setValue('isOpen', v)}
-        />
-      </div>
-
-      <div
-        className={cn(
-          'flex items-center justify-between rounded-lg border px-3 py-2 transition-colors',
-          watch('showOnHomepage')
-            ? 'border-sky-300 bg-sky-50 dark:border-sky-900 dark:bg-sky-950/40'
-            : 'border-input bg-background',
-        )}
-      >
-        <div>
-          <Label htmlFor="showOnHomepage">Show on home page</Label>
-          <p className="text-xs text-muted-foreground">
-            Also list this batch in the home-page upcoming-batches table.
-          </p>
-        </div>
-        <Switch
-          id="showOnHomepage"
-          checked={watch('showOnHomepage')}
-          onCheckedChange={(v) => setValue('showOnHomepage', v)}
         />
       </div>
     </form>

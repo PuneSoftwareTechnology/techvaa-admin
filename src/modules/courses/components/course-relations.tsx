@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -37,14 +37,26 @@ import { CourseSection } from './course-form'
 export function CourseRelations({
   courseId,
   onUnlock,
+  onNestedOpenChange,
 }: {
   /** The saved course's id. Absent while creating a brand-new course. */
   courseId?: string
   /** Called from a locked panel's button to save the course first. */
   onUnlock?: () => void
+  /** Reports whether any nested panel dialog is currently open. */
+  onNestedOpenChange?: (open: boolean) => void
 }) {
   const locked = !courseId
   const cid = courseId ?? ''
+
+  // Aggregate the open state of every panel's nested dialog so the parent
+  // course dialog can lock itself against implicit dismissal while one is open.
+  const openPanels = useRef(new Set<string>())
+  const reportOpen = (key: string, open: boolean) => {
+    if (open) openPanels.current.add(key)
+    else openPanels.current.delete(key)
+    onNestedOpenChange?.(openPanels.current.size > 0)
+  }
 
   return (
     <div className="space-y-2">
@@ -82,6 +94,7 @@ export function CourseRelations({
           })}
           newForm={{ ...FAQ_DEFAULTS, courseIds: [cid] }}
           renderForm={(p) => <FaqForm {...p} />}
+          onOpenChange={(o) => reportOpen('faqs', o)}
         />
 
         <RelationPanel<CurriculumItem, CurriculumFormValues>
@@ -93,7 +106,7 @@ export function CourseRelations({
           listParams={{
             filters: { courseId: cid },
             pageSize: 100,
-            sortBy: 'order',
+            sortBy: 'sortOrder',
             sortOrder: 'asc',
           }}
           formId="curriculum-rel-form"
@@ -104,10 +117,11 @@ export function CourseRelations({
             courseId: i.courseId,
             heading: i.heading,
             description: i.description,
-            order: i.order,
+            sortOrder: i.sortOrder,
           })}
           newForm={{ ...CURRICULUM_DEFAULTS, courseId: cid }}
           renderForm={(p) => <CurriculumForm {...p} />}
+          onOpenChange={(o) => reportOpen('curriculum', o)}
         />
 
         <RelationPanel<CourseBatch, CourseBatchFormValues>
@@ -132,11 +146,14 @@ export function CourseRelations({
             courseId: b.courseId,
             startDate: b.startDate.slice(0, 10),
             duration: b.duration,
+            mode: b.mode ?? '',
+            timing: b.timing ?? '',
+            status: b.status,
             isOpen: b.isOpen,
-            showOnHomepage: b.showOnHomepage,
           })}
           newForm={{ ...COURSE_BATCH_DEFAULTS, courseId: cid }}
           renderForm={(p) => <CourseBatchForm {...p} />}
+          onOpenChange={(o) => reportOpen('batches', o)}
         />
       </div>
     </div>
@@ -167,6 +184,8 @@ interface RelationPanelProps<T extends Entity, F> {
     onSubmit: (values: F) => void
   }) => ReactNode
   dialogClassName?: string
+  /** Notifies the parent when this panel's nested dialog opens or closes. */
+  onOpenChange?: (open: boolean) => void
 }
 
 function RelationPanel<T extends Entity, F>({
@@ -185,6 +204,7 @@ function RelationPanel<T extends Entity, F>({
   newForm,
   renderForm,
   dialogClassName,
+  onOpenChange,
 }: RelationPanelProps<T, F>) {
   const { data, isLoading } = hooks.useList(listParams)
   const createMutation = hooks.useCreate()
@@ -194,6 +214,10 @@ function RelationPanel<T extends Entity, F>({
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<T | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<T | null>(null)
+
+  useEffect(() => {
+    onOpenChange?.(open)
+  }, [open, onOpenChange])
 
   const all = data?.data ?? []
   const rows = filterRows ? filterRows(all) : all

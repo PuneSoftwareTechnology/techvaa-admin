@@ -6,7 +6,6 @@ import type {
   CurriculumItem,
   Faq,
   Lead,
-  Media,
   Placement,
   Review,
   Testimonial,
@@ -21,7 +20,6 @@ import {
   CURRICULUM_SEED,
   FAQ_SEED,
   LEAD_SEED,
-  MEDIA_SEED,
   PLACEMENT_SEED,
   REVIEW_SEED,
   TESTIMONIAL_SEED,
@@ -71,10 +69,6 @@ export const mockDb = {
   courseEnquiries: new MockCollection<CourseEnquiry>(COURSE_ENQUIRY_SEED, {
     idPrefix: 'enq',
     searchFields: ['name', 'phone', 'course'],
-  }),
-  media: new MockCollection<Media>(MEDIA_SEED, {
-    idPrefix: 'med',
-    searchFields: ['originalName', 'fileName', 'fileType'],
   }),
   users: new MockCollection<MockUser>(SEED_USERS, {
     idPrefix: 'usr',

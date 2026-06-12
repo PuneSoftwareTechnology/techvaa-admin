@@ -63,6 +63,12 @@ const ROBOTS_VALUES = [
   "NOINDEX_NOFOLLOW",
 ] as const;
 
+const BATCH_STATUS_VALUES = [
+  "ENROLLMENT_OPEN",
+  "LIMITED_SEATS",
+  "FILLING_FAST",
+] as const;
+
 const LEAD_STATUS_VALUES = [
   "NEW",
   "CONTACTED",
@@ -114,11 +120,11 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     model: "curriculumItem",
     label: "Curriculum item",
     searchable: ["heading", "description"],
-    sortable: ["order", "createdAt", "heading"],
-    defaultSort: "order",
+    sortable: ["sortOrder", "heading"],
+    defaultSort: "sortOrder",
     softDelete: false,
-    writable: ["courseId", "heading", "description", "order"],
-    coerce: { order: "int" },
+    writable: ["courseId", "heading", "description", "sortOrder"],
+    coerce: { sortOrder: "int" },
     include: {
       course: { select: { id: true, title: true, slug: true } },
     },
@@ -139,9 +145,12 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       "courseId",
       "startDate",
       "duration",
+      "mode",
+      "timing",
+      "status",
       "isOpen",
-      "showOnHomepage",
     ],
+    nullableBlanks: ["mode", "timing"],
     coerce: { startDate: "date" },
     include: {
       course: { select: { id: true, title: true, slug: true } },
@@ -149,7 +158,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     filters: {
       courseId: { kind: "eq" },
       isOpen: { kind: "boolean" },
-      showOnHomepage: { kind: "boolean" },
+      status: { kind: "enum", values: BATCH_STATUS_VALUES },
     },
   },
 

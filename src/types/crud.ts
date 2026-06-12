@@ -12,9 +12,12 @@ export interface CrudRepository<T, C = Partial<T>, U = Partial<T>> {
   remove(id: string): Promise<void>
 }
 
-/** Shape shared by every persisted entity. (`updatedAt` is absent on Media.) */
+/**
+ * Shape shared by every persisted entity. (`updatedAt` is absent on Media;
+ * `createdAt` is absent on CurriculumItem, which the DB does not timestamp.)
+ */
 export interface Entity {
   id: string
-  createdAt: string
+  createdAt?: string
   updatedAt?: string
 }

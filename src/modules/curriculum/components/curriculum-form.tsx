@@ -52,11 +52,11 @@ export function CurriculumForm({
         </Field>
         <Field
           label="Order"
-          htmlFor="order"
+          htmlFor="sortOrder"
           hint="Lower first"
-          error={errors.order?.message}
+          error={errors.sortOrder?.message}
         >
-          <Input id="order" type="number" min={0} {...register('order', { valueAsNumber: true })} />
+          <Input id="sortOrder" type="number" min={0} {...register('sortOrder', { valueAsNumber: true })} />
         </Field>
       </div>
 

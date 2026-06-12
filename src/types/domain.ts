@@ -28,8 +28,6 @@ export const PERMISSIONS = [
   'reviews',
   'testimonials',
   'placements',
-  'media',
-  'seo',
   'batchSchedule',
   'credentials',
 ] as const
@@ -113,11 +111,13 @@ export interface CurriculumItem {
   courseId: string
   heading: string
   description: string
-  order: number
-  createdAt: ISODateString
+  sortOrder: number
   /** Parent course (included on reads). */
   course?: Pick<Course, 'id' | 'title' | 'slug'>
 }
+
+/** Enrollment state of a scheduled batch, surfaced as a badge on the site. */
+export type BatchStatus = 'ENROLLMENT_OPEN' | 'LIMITED_SEATS' | 'FILLING_FAST'
 
 /** An upcoming batch / new batch schedule for a course. */
 export interface CourseBatch {
@@ -125,9 +125,12 @@ export interface CourseBatch {
   courseId: string
   startDate: ISODateString
   duration: string
+  /** Delivery mode, e.g. "Instructor Led Training". */
+  mode?: string | null
+  /** Human-readable schedule, e.g. "Weekdays 9–11 AM". */
+  timing?: string | null
+  status: BatchStatus
   isOpen: boolean
-  /** Also surface this batch in the home-page upcoming-batches table. */
-  showOnHomepage: boolean
   createdAt: ISODateString
   /** Parent course (included on reads). */
   course?: Pick<Course, 'id' | 'title' | 'slug'>
@@ -236,15 +239,4 @@ export interface CourseEnquiry extends Timestamps {
   course: string
   message?: string | null
   status: LeadStatus
-}
-
-export interface Media {
-  id: string
-  fileName: string
-  originalName: string
-  fileType: string
-  fileSize: number
-  url: string
-  createdAt: ISODateString
-  uploadedById?: string | null
 }

@@ -5,7 +5,7 @@ export const curriculumSchema = z.object({
   courseId: z.string().min(1, 'Select a course'),
   heading: z.string().min(2, 'Heading is required'),
   description: z.string().min(2, 'Description is required'),
-  order: z
+  sortOrder: z
     .number({ message: 'Enter a number' })
     .int()
     .min(0, 'Must be 0 or greater'),
@@ -17,5 +17,5 @@ export const CURRICULUM_DEFAULTS: CurriculumFormValues = {
   courseId: '',
   heading: '',
   description: '',
-  order: 0,
+  sortOrder: 0,
 }

@@ -65,18 +65,9 @@ export const queryKeys = {
       ['courseEnquiries', 'list', params ?? {}] as const,
     detail: (id: string) => ['courseEnquiries', 'detail', id] as const,
   },
-  media: {
-    all: ['media'] as const,
-    list: (params?: ListParams) => ['media', 'list', params ?? {}] as const,
-  },
   users: {
     all: ['users'] as const,
     list: (params?: ListParams) => ['users', 'list', params ?? {}] as const,
     detail: (id: string) => ['users', 'detail', id] as const,
-  },
-  seo: {
-    all: ['seo'] as const,
-    list: (params?: ListParams) => ['seo', 'list', params ?? {}] as const,
-    detail: (id: string) => ['seo', 'detail', id] as const,
   },
 } as const

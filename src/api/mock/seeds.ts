@@ -6,7 +6,6 @@ import type {
   CurriculumItem,
   Faq,
   Lead,
-  Media,
   Placement,
   Review,
   Testimonial,
@@ -39,27 +38,27 @@ export const COURSE_SEED: Course[] = [
 ]
 
 export const CURRICULUM_SEED: CurriculumItem[] = [
-  { id: 'cur_fico_1', courseId: 'crs_fico', heading: 'General Ledger (GL) Accounting', description: 'Chart of accounts, document types, posting keys and the new G/L in S/4HANA.', order: 1, createdAt: daysAgo(80) },
-  { id: 'cur_fico_2', courseId: 'crs_fico', heading: 'Accounts Payable & Receivable', description: 'Vendor and customer master data, invoice and payment processing, dunning.', order: 2, createdAt: daysAgo(80) },
-  { id: 'cur_fico_3', courseId: 'crs_fico', heading: 'Asset Accounting', description: 'Asset master records, depreciation areas and period-end asset processes.', order: 3, createdAt: daysAgo(80) },
-  { id: 'cur_fico_4', courseId: 'crs_fico', heading: 'Controlling (CO)', description: 'Cost centre and profit centre accounting, internal orders and reporting.', order: 4, createdAt: daysAgo(80) },
-  { id: 'cur_mm_1', courseId: 'crs_mm', heading: 'Procurement Process', description: 'Purchase requisitions, RFQs, purchase orders and the P2P cycle.', order: 1, createdAt: daysAgo(75) },
-  { id: 'cur_mm_2', courseId: 'crs_mm', heading: 'Inventory Management', description: 'Goods movements, stock types and physical inventory.', order: 2, createdAt: daysAgo(75) },
-  { id: 'cur_mm_3', courseId: 'crs_mm', heading: 'Invoice Verification', description: 'Logistics invoice verification and the three-way match.', order: 3, createdAt: daysAgo(75) },
-  { id: 'cur_abap_1', courseId: 'crs_abap', heading: 'ABAP Fundamentals', description: 'Data types, internal tables, control structures and the ABAP Dictionary.', order: 1, createdAt: daysAgo(70) },
-  { id: 'cur_abap_2', courseId: 'crs_abap', heading: 'Reports & ALV', description: 'Classical and interactive reports, ALV grid and list output.', order: 2, createdAt: daysAgo(70) },
-  { id: 'cur_abap_3', courseId: 'crs_abap', heading: 'BAPIs, BADIs & Enhancements', description: 'Enhancement framework, user exits, BADIs and remote-enabled BAPIs.', order: 3, createdAt: daysAgo(70) },
-  { id: 'cur_abap_4', courseId: 'crs_abap', heading: 'OData & RAP', description: 'Building OData services and an intro to the ABAP RESTful Application Model.', order: 4, createdAt: daysAgo(70) },
+  { id: 'cur_fico_1', courseId: 'crs_fico', heading: 'General Ledger (GL) Accounting', description: 'Chart of accounts, document types, posting keys and the new G/L in S/4HANA.', sortOrder: 1 },
+  { id: 'cur_fico_2', courseId: 'crs_fico', heading: 'Accounts Payable & Receivable', description: 'Vendor and customer master data, invoice and payment processing, dunning.', sortOrder: 2 },
+  { id: 'cur_fico_3', courseId: 'crs_fico', heading: 'Asset Accounting', description: 'Asset master records, depreciation areas and period-end asset processes.', sortOrder: 3 },
+  { id: 'cur_fico_4', courseId: 'crs_fico', heading: 'Controlling (CO)', description: 'Cost centre and profit centre accounting, internal orders and reporting.', sortOrder: 4 },
+  { id: 'cur_mm_1', courseId: 'crs_mm', heading: 'Procurement Process', description: 'Purchase requisitions, RFQs, purchase orders and the P2P cycle.', sortOrder: 1 },
+  { id: 'cur_mm_2', courseId: 'crs_mm', heading: 'Inventory Management', description: 'Goods movements, stock types and physical inventory.', sortOrder: 2 },
+  { id: 'cur_mm_3', courseId: 'crs_mm', heading: 'Invoice Verification', description: 'Logistics invoice verification and the three-way match.', sortOrder: 3 },
+  { id: 'cur_abap_1', courseId: 'crs_abap', heading: 'ABAP Fundamentals', description: 'Data types, internal tables, control structures and the ABAP Dictionary.', sortOrder: 1 },
+  { id: 'cur_abap_2', courseId: 'crs_abap', heading: 'Reports & ALV', description: 'Classical and interactive reports, ALV grid and list output.', sortOrder: 2 },
+  { id: 'cur_abap_3', courseId: 'crs_abap', heading: 'BAPIs, BADIs & Enhancements', description: 'Enhancement framework, user exits, BADIs and remote-enabled BAPIs.', sortOrder: 3 },
+  { id: 'cur_abap_4', courseId: 'crs_abap', heading: 'OData & RAP', description: 'Building OData services and an intro to the ABAP RESTful Application Model.', sortOrder: 4 },
 ]
 
 export const COURSE_BATCH_SEED: CourseBatch[] = [
-  { id: 'bat_fico_1', courseId: 'crs_fico', startDate: daysAhead(14), duration: '8 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(10) },
-  { id: 'bat_fico_2', courseId: 'crs_fico', startDate: daysAhead(45), duration: '8 weeks', isOpen: true, showOnHomepage: false, createdAt: daysAgo(8) },
-  { id: 'bat_mm_1', courseId: 'crs_mm', startDate: daysAhead(21), duration: '6 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(9) },
-  { id: 'bat_abap_1', courseId: 'crs_abap', startDate: daysAhead(7), duration: '10 weeks', isOpen: false, showOnHomepage: false, createdAt: daysAgo(12) },
-  { id: 'bat_abap_2', courseId: 'crs_abap', startDate: daysAhead(60), duration: '10 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(3) },
-  { id: 'bat_sd_1', courseId: 'crs_sd', startDate: daysAhead(30), duration: '6 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(5) },
-  { id: 'bat_hr_1', courseId: 'crs_hr', startDate: daysAhead(18), duration: '7 weeks', isOpen: true, showOnHomepage: false, createdAt: daysAgo(4) },
+  { id: 'bat_fico_1', courseId: 'crs_fico', startDate: daysAhead(14), duration: '8 weeks', mode: 'Instructor Led Training', timing: 'Weekdays 9–11 AM', status: 'ENROLLMENT_OPEN', isOpen: true, createdAt: daysAgo(10) },
+  { id: 'bat_fico_2', courseId: 'crs_fico', startDate: daysAhead(45), duration: '8 weeks', mode: 'Instructor Led Training', timing: 'Weekends 10 AM–1 PM', status: 'ENROLLMENT_OPEN', isOpen: true, createdAt: daysAgo(8) },
+  { id: 'bat_mm_1', courseId: 'crs_mm', startDate: daysAhead(21), duration: '6 weeks', mode: 'Instructor Led Training', timing: 'Weekdays 7–9 PM', status: 'LIMITED_SEATS', isOpen: true, createdAt: daysAgo(9) },
+  { id: 'bat_abap_1', courseId: 'crs_abap', startDate: daysAhead(7), duration: '10 weeks', mode: 'Instructor Led Training', timing: 'Weekdays 6–8 PM', status: 'FILLING_FAST', isOpen: false, createdAt: daysAgo(12) },
+  { id: 'bat_abap_2', courseId: 'crs_abap', startDate: daysAhead(60), duration: '10 weeks', mode: 'Instructor Led Training', timing: 'Weekends 11 AM–2 PM', status: 'ENROLLMENT_OPEN', isOpen: true, createdAt: daysAgo(3) },
+  { id: 'bat_sd_1', courseId: 'crs_sd', startDate: daysAhead(30), duration: '6 weeks', mode: 'Instructor Led Training', timing: 'Weekdays 9–11 AM', status: 'ENROLLMENT_OPEN', isOpen: true, createdAt: daysAgo(5) },
+  { id: 'bat_hr_1', courseId: 'crs_hr', startDate: daysAhead(18), duration: '7 weeks', mode: 'Instructor Led Training', timing: 'Weekends 10 AM–12 PM', status: 'LIMITED_SEATS', isOpen: true, createdAt: daysAgo(4) },
 ]
 
 export const BLOG_SEED: Blog[] = [
@@ -112,11 +111,4 @@ export const COURSE_ENQUIRY_SEED: CourseEnquiry[] = [
   { id: 'enq_3', name: 'Deepak Rao', phone: '+91 96333 44556', course: 'SAP ABAP (Programming)', message: null, status: 'CONTACTED', createdAt: daysAgo(4), updatedAt: daysAgo(3) },
   { id: 'enq_4', name: 'Lakshmi Menon', phone: '+91 95444 55667', course: 'SAP S/4HANA Sales (SD)', message: 'Do you offer EMI for the self-paced track?', status: 'QUALIFIED', createdAt: daysAgo(6), updatedAt: daysAgo(5) },
   { id: 'enq_5', name: 'Imran Sheikh', phone: '+91 94555 66778', course: 'SAP S/4HANA Finance (FICO)', message: 'Already paid the registration fee.', status: 'CLOSED', createdAt: daysAgo(12), updatedAt: daysAgo(10) },
-]
-
-export const MEDIA_SEED: Media[] = [
-  { id: 'med_1', fileName: 'courses/fico-hero.webp', originalName: 'fico-hero.webp', fileType: 'image/webp', fileSize: 184_320, url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600', createdAt: daysAgo(30), uploadedById: 'usr_admin' },
-  { id: 'med_2', fileName: 'blog/abap-cover.webp', originalName: 'abap-cover.webp', fileType: 'image/webp', fileSize: 220_160, url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600', createdAt: daysAgo(22), uploadedById: 'usr_admin' },
-  { id: 'med_3', fileName: 'placements/accenture.png', originalName: 'accenture-logo.png', fileType: 'image/png', fileSize: 48_128, url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600', createdAt: daysAgo(15), uploadedById: 'usr_admin' },
-  { id: 'med_4', fileName: 'brochures/sap-catalog.pdf', originalName: 'sap-course-catalog.pdf', fileType: 'application/pdf', fileSize: 1_048_576, url: '#', createdAt: daysAgo(10), uploadedById: 'usr_admin' },
 ]

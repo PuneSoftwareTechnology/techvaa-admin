@@ -24,7 +24,7 @@ export default function CurriculumPage() {
     CurriculumItem,
     typeof CURRICULUM_DEFAULTS,
     Partial<typeof CURRICULUM_DEFAULTS>
-  >(curriculumHooks, { sortBy: 'order', sortOrder: 'asc' })
+  >(curriculumHooks, { sortBy: 'sortOrder', sortOrder: 'asc' })
 
   // Resolve a course title for each row (the mock list returns only courseId).
   const { data: courses } = courseHooks.useList({ pageSize: 100 })
@@ -37,11 +37,11 @@ export default function CurriculumPage() {
 
   const columns: DataTableColumn<CurriculumItem>[] = [
     {
-      id: 'order',
+      id: 'sortOrder',
       header: '#',
-      sortKey: 'order',
+      sortKey: 'sortOrder',
       className: 'w-12 text-muted-foreground',
-      cell: (i) => i.order,
+      cell: (i) => i.sortOrder,
     },
     {
       id: 'heading',
@@ -123,7 +123,7 @@ export default function CurriculumPage() {
                   courseId: c.editing.courseId,
                   heading: c.editing.heading,
                   description: c.editing.description,
-                  order: c.editing.order,
+                  sortOrder: c.editing.sortOrder,
                 }
               : undefined
           }

@@ -9,8 +9,6 @@ import {
   ListChecks,
   Inbox,
   ClipboardList,
-  Images,
-  Search,
   ShieldCheck,
   CalendarClock,
   type LucideIcon,
@@ -108,20 +106,6 @@ export const NAV_ITEMS: NavItem[] = [
     permission: 'batchSchedule',
   },
 
-  {
-    title: 'Media',
-    to: '/media',
-    icon: Images,
-    group: 'System',
-    permission: 'media',
-  },
-  {
-    title: 'SEO',
-    to: '/seo',
-    icon: Search,
-    group: 'System',
-    permission: 'seo',
-  },
   {
     title: 'Credentials',
     to: '/credentials',

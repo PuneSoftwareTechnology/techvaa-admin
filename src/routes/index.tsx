@@ -32,8 +32,6 @@ const LeadsPage = lazy(() => import('@/modules/leads/pages/leads-page'))
 const CourseEnquiriesPage = lazy(
   () => import('@/modules/course-enquiries/pages/course-enquiries-page'),
 )
-const MediaPage = lazy(() => import('@/modules/media/pages/media-page'))
-const SeoPage = lazy(() => import('@/modules/seo/pages/seo-page'))
 const CredentialsPage = lazy(
   () => import('@/modules/access/pages/credentials-page'),
 )
@@ -139,22 +137,6 @@ export function AppRoutes() {
               element={
                 <RequirePermission permission="courseEnquiries">
                   <CourseEnquiriesPage />
-                </RequirePermission>
-              }
-            />
-            <Route
-              path="media"
-              element={
-                <RequirePermission permission="media">
-                  <MediaPage />
-                </RequirePermission>
-              }
-            />
-            <Route
-              path="seo"
-              element={
-                <RequirePermission permission="seo">
-                  <SeoPage />
                 </RequirePermission>
               }
             />

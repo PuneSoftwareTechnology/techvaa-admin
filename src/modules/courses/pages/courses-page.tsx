@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
@@ -29,6 +30,11 @@ export default function CoursesPage() {
   >(courseHooks, { sortBy: 'createdAt', sortOrder: 'desc' })
 
   const createCourse = courseHooks.useCreate()
+
+  // True while a linked-content (curriculum / batch / FAQ) dialog is open, so the
+  // course dialog locks against implicit close — dismissing the child can't fall
+  // through and close the course editor too.
+  const [relationOpen, setRelationOpen] = useState(false)
 
   // On create we keep the dialog open and switch it into edit mode for the new
   // course, so the linked-content panels (curriculum / batches / FAQs) unlock.
@@ -116,6 +122,7 @@ export default function CoursesPage() {
         isSubmitting={c.isSubmitting || createCourse.isPending}
         submitLabel={c.editing ? 'Save changes' : 'Create course'}
         className="w-[90vw] sm:max-w-[90vw]"
+        lockClose={relationOpen}
       >
         <CourseForm
           formId={FORM_ID}
@@ -139,6 +146,7 @@ export default function CoursesPage() {
           aside={
             <CourseRelations
               courseId={c.editing?.id}
+              onNestedOpenChange={setRelationOpen}
               onUnlock={() =>
                 (
                   document.getElementById(FORM_ID) as HTMLFormElement | null

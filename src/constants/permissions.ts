@@ -69,18 +69,6 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     description: 'Showcase student placements.',
     to: '/placements',
   },
-  media: {
-    key: 'media',
-    label: 'Media',
-    description: 'Upload and manage media assets.',
-    to: '/media',
-  },
-  seo: {
-    key: 'seo',
-    label: 'SEO',
-    description: 'Manage SEO metadata.',
-    to: '/seo',
-  },
   batchSchedule: {
     key: 'batchSchedule',
     label: 'Batch Schedule',
@@ -122,9 +110,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'reviews',
     'testimonials',
     'placements',
-    'media',
   ],
-  SEO_MANAGER: ['seo'],
+  SEO_MANAGER: [],
 }
 
 /** The only role that bypasses per-route checks and owns credential management. */

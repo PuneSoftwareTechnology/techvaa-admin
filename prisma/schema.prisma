@@ -114,8 +114,8 @@ model Course {
   // FAQs attached to this course (shown on the course detail page).
   faqs Faq[] @relation("CourseFaqs")
 
-  // Blogs that link back to this course (Blog.relatedCourse).
-  relatedBlogs Blog[] @relation("BlogRelatedCourse")
+  // Blogs that curate this course as related (Blog.relatedCourses, M2M).
+  relatedBlogs Blog[] @relation("BlogRelatedCourses")
 
   // Self many-to-many: other courses surfaced as "related" on the detail page.
   // `relatedCourses` is the curated set this course points at; `relatedFrom`
@@ -174,19 +174,16 @@ model Blog {
   // Primary content block
   primaryTitle String?
   primaryIntro String?
-  primaryImage String?
   primaryText  String?
 
   // Secondary content block
   secondaryTitle String?
   secondaryIntro String?
-  secondaryImage String?
   secondaryText  String?
 
   // Tertiary content block (the only block with bullet points)
   tertiaryTitle  String?
   tertiaryIntro  String?
-  tertiaryImage  String?
   tertiaryText   String?
   tertiaryPoints String[] // "Add bullet point" list
 
@@ -199,13 +196,12 @@ model Blog {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  relatedCourseId String?
-  relatedCourse   Course? @relation("BlogRelatedCourse", fields: [relatedCourseId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  // Curated related courses (M2M). Implicit join table _BlogRelatedCourses.
+  relatedCourses Course[] @relation("BlogRelatedCourses")
 
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
 
-  @@index([relatedCourseId])
   @@index([isPublished, publishedAt])
   @@index([publishedAt])
   @@index([showOnHomepage])

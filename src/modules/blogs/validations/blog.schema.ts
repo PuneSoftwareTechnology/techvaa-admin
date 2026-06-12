@@ -18,25 +18,22 @@ export const blogSchema = z.object({
   // Primary content block
   primaryTitle: optionalText,
   primaryIntro: optionalText,
-  primaryImage: optionalImage,
   primaryText: optionalText,
 
   // Secondary content block
   secondaryTitle: optionalText,
   secondaryIntro: optionalText,
-  secondaryImage: optionalImage,
   secondaryText: optionalText,
 
   // Tertiary content block
   tertiaryTitle: optionalText,
   tertiaryIntro: optionalText,
-  tertiaryImage: optionalImage,
   tertiaryText: optionalText,
   tertiaryPoints: z.array(z.string().min(1)),
 
   conclusion: optionalText,
 
-  relatedCourseId: z.string().optional().or(z.literal('')),
+  relatedCourseIds: z.array(z.string()),
   showOnHomepage: z.boolean(),
   isPublished: z.boolean(),
 })
@@ -51,19 +48,16 @@ export const BLOG_DEFAULTS: BlogFormValues = {
   introduction: '',
   primaryTitle: '',
   primaryIntro: '',
-  primaryImage: '',
   primaryText: '',
   secondaryTitle: '',
   secondaryIntro: '',
-  secondaryImage: '',
   secondaryText: '',
   tertiaryTitle: '',
   tertiaryIntro: '',
-  tertiaryImage: '',
   tertiaryText: '',
   tertiaryPoints: [],
   conclusion: '',
-  relatedCourseId: '',
+  relatedCourseIds: [],
   showOnHomepage: false,
   isPublished: false,
 }

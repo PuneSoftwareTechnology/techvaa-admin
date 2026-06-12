@@ -172,18 +172,50 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     writable: [
       "title",
       "slug",
-      "excerpt",
-      "content",
+      "metaDescription",
       "featuredImage",
-      "readingTime",
+      "introduction",
+      "primaryTitle",
+      "primaryIntro",
+      "primaryText",
+      "secondaryTitle",
+      "secondaryIntro",
+      "secondaryText",
+      "tertiaryTitle",
+      "tertiaryIntro",
+      "tertiaryText",
+      "tertiaryPoints",
+      "conclusion",
+      "showOnHomepage",
       "isPublished",
     ],
-    nullableBlanks: ["excerpt", "featuredImage"],
-    coerce: { readingTime: "int" },
+    nullableBlanks: [
+      "metaDescription",
+      "featuredImage",
+      "primaryTitle",
+      "primaryIntro",
+      "primaryText",
+      "secondaryTitle",
+      "secondaryIntro",
+      "secondaryText",
+      "tertiaryTitle",
+      "tertiaryIntro",
+      "tertiaryText",
+      "conclusion",
+    ],
     include: {
       seo: true,
+      relatedCourses: { select: { id: true, title: true, slug: true } },
     },
     seoRelation: true,
+    // Curated related courses (m2m), written from the form's id array.
+    relations: { relatedCourses: "relatedCourseIds" },
+    // Expose the related course ids as a flat array for the form's multi-select.
+    transform: (row) => {
+      const related =
+        (row.relatedCourses as { id: string }[] | undefined) ?? [];
+      return { ...row, relatedCourseIds: related.map((c) => c.id) };
+    },
     filters: {
       isPublished: { kind: "boolean" },
     },

@@ -10,14 +10,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { MultiSelect } from '@/components/forms/multi-select'
 import { courseHooks } from '@/modules/courses/hooks/use-courses'
+import { CourseSection as Section } from '@/modules/courses/components/course-form'
 import { ImageUpload } from '@/components/forms/image-upload'
 import { RichTextEditor } from '@/components/forms/rich-text-editor'
 import {
@@ -34,9 +29,9 @@ interface BlogFormProps {
 
 /** The three identical content blocks share a key prefix in the schema. */
 const CONTENT_BLOCKS = [
-  { key: 'primary', label: 'Primary' },
-  { key: 'secondary', label: 'Secondary' },
-  { key: 'tertiary', label: 'Tertiary' },
+  { key: 'primary', label: 'Primary', accent: 'sky' },
+  { key: 'secondary', label: 'Secondary', accent: 'emerald' },
+  { key: 'tertiary', label: 'Tertiary', accent: 'amber' },
 ] as const
 
 export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
@@ -59,84 +54,81 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
   const slug = watch('slug')
 
   return (
-    <form id={formId} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Field label="Title" htmlFor="title" required error={errors.title?.message}>
-        <Input
-          id="title"
-          {...register('title', {
-            onChange: (e) => {
-              if (!slugDirty.current) setValue('slug', slugify(e.target.value))
-            },
-          })}
-        />
-      </Field>
+    <form
+      id={formId}
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid items-start gap-5 lg:grid-cols-4"
+    >
+      {/* Column 1 — main details */}
+      <Section title="Main details" accent="indigo">
+        <Field label="Title" htmlFor="title" required error={errors.title?.message}>
+          <Input
+            id="title"
+            {...register('title', {
+              onChange: (e) => {
+                if (!slugDirty.current) setValue('slug', slugify(e.target.value))
+              },
+            })}
+          />
+        </Field>
 
-      <Field label="Slug" htmlFor="slug" required error={errors.slug?.message}>
-        <Input id="slug" {...register('slug', { onChange: () => (slugDirty.current = true) })} />
-      </Field>
+        <Field label="Slug" htmlFor="slug" required error={errors.slug?.message}>
+          <Input id="slug" {...register('slug', { onChange: () => (slugDirty.current = true) })} />
+        </Field>
 
-      <Field
-        label="Meta Description"
-        htmlFor="metaDescription"
-        hint="Shown on cards and in search results"
-        error={errors.metaDescription?.message}
-      >
-        <Textarea id="metaDescription" rows={2} {...register('metaDescription')} />
-      </Field>
+        <Field
+          label="Meta Description"
+          htmlFor="metaDescription"
+          hint="Shown on cards and in search results"
+          error={errors.metaDescription?.message}
+        >
+          <Textarea id="metaDescription" rows={2} {...register('metaDescription')} />
+        </Field>
 
-      <Field label="Featured Image" error={errors.featuredImage?.message}>
-        <ImageUpload
-          value={watch('featuredImage')}
-          folder="blogs"
-          slug={slug}
-          onChange={(url) =>
-            setValue('featuredImage', url, { shouldDirty: true, shouldValidate: true })
-          }
-        />
-      </Field>
+        <Field label="Featured Image" error={errors.featuredImage?.message}>
+          <ImageUpload
+            value={watch('featuredImage')}
+            folder="blogs"
+            slug={slug}
+            onChange={(url) =>
+              setValue('featuredImage', url, { shouldDirty: true, shouldValidate: true })
+            }
+          />
+        </Field>
 
-      <Field
-        label="Introduction"
-        htmlFor="introduction"
-        required
-        error={errors.introduction?.message}
-      >
-        <RichTextEditor
-          id="introduction"
-          value={watch('introduction')}
-          onChange={(html) =>
-            setValue('introduction', html, { shouldDirty: true, shouldValidate: true })
-          }
-          invalid={!!errors.introduction}
-          placeholder="Write the introduction…"
-        />
-      </Field>
+        <Field
+          label="Introduction"
+          htmlFor="introduction"
+          required
+          error={errors.introduction?.message}
+        >
+          <RichTextEditor
+            id="introduction"
+            value={watch('introduction')}
+            onChange={(html) =>
+              setValue('introduction', html, { shouldDirty: true, shouldValidate: true })
+            }
+            invalid={!!errors.introduction}
+            placeholder="Write the introduction…"
+          />
+        </Field>
+      </Section>
 
-      {/* Templated content blocks */}
-      {CONTENT_BLOCKS.map(({ key, label }) => (
-        <fieldset key={key} className="space-y-3 rounded-lg border border-input p-4">
-          <legend className="px-1 text-sm font-medium">{label} Content</legend>
-
-          <Field label={`${label} Content Title`} error={errors[`${key}Title`]?.message}>
+      {/* Right side — content sections, then conclusion + settings beneath them */}
+      <div className="grid items-start gap-5 lg:col-span-3">
+        {/* Templated content blocks */}
+        <div className="grid items-start gap-5 lg:grid-cols-3">
+          {CONTENT_BLOCKS.map(({ key, label, accent }) => (
+            <Section key={key} title={`${label} section`} accent={accent}>
+          <Field label="Title" error={errors[`${key}Title`]?.message}>
             <Input {...register(`${key}Title`)} />
           </Field>
 
-          <Field label={`${label} Content Intro`} error={errors[`${key}Intro`]?.message}>
+          <Field label="Intro" error={errors[`${key}Intro`]?.message}>
             <Textarea rows={2} {...register(`${key}Intro`)} />
           </Field>
 
-          <Field label={`${label} Content Image`} error={errors[`${key}Image`]?.message}>
-            <ImageUpload
-              value={watch(`${key}Image`)}
-              folder="blogs"
-              slug={slug}
-              onChange={(url) =>
-                setValue(`${key}Image`, url, { shouldDirty: true, shouldValidate: true })
-              }
-            />
-          </Field>
-
-          <Field label={`${label} Content Text`} error={errors[`${key}Text`]?.message}>
+          <Field label="Text" error={errors[`${key}Text`]?.message}>
             <RichTextEditor
               value={watch(`${key}Text`) ?? ''}
               onChange={(html) =>
@@ -149,7 +141,7 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
 
           {/* Bullet points live only on the tertiary block */}
           {key === 'tertiary' && (
-            <Field label="Tertiary Content Points" error={errors.tertiaryPoints?.message as string}>
+            <Field label="Points" error={errors.tertiaryPoints?.message as string}>
               <div className="space-y-2">
                 {points.fields.map((f, i) => (
                   <div key={f.id} className="flex items-center gap-2">
@@ -179,60 +171,66 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
               </div>
             </Field>
           )}
-        </fieldset>
-      ))}
-
-      <Field label="Conclusion" htmlFor="conclusion" error={errors.conclusion?.message}>
-        <RichTextEditor
-          id="conclusion"
-          value={watch('conclusion') ?? ''}
-          onChange={(html) =>
-            setValue('conclusion', html, { shouldDirty: true, shouldValidate: true })
-          }
-          invalid={!!errors.conclusion}
-          placeholder="Wrap up the article…"
-        />
-      </Field>
-
-      <Field label="Related Course" error={errors.relatedCourseId?.message}>
-        <Select
-          value={watch('relatedCourseId') || undefined}
-          onValueChange={(v) => setValue('relatedCourseId', v)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a course (optional)" />
-          </SelectTrigger>
-          <SelectContent>
-            {courses?.data.map((course) => (
-              <SelectItem key={course.id} value={course.id}>
-                {course.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </Field>
-
-      <div className="flex items-center justify-between rounded-lg border border-input px-3 py-2">
-        <Label htmlFor="showOnHomepage">Show on HomePage</Label>
-        <Switch
-          id="showOnHomepage"
-          checked={watch('showOnHomepage')}
-          onCheckedChange={(v) => setValue('showOnHomepage', v)}
-        />
-      </div>
-
-      <div className="flex items-center justify-between rounded-lg border border-input px-3 py-2">
-        <div>
-          <Label htmlFor="isPublished">Status</Label>
-          <p className="text-xs text-muted-foreground">
-            {watch('isPublished') ? 'Published' : 'Draft'}
-          </p>
+            </Section>
+          ))}
         </div>
-        <Switch
-          id="isPublished"
-          checked={watch('isPublished')}
-          onCheckedChange={(v) => setValue('isPublished', v)}
-        />
+
+        {/* Conclusion + settings, side by side, filling the space below */}
+        <div className="grid items-start gap-5 lg:grid-cols-2">
+          <Section title="Conclusion" accent="violet">
+          <Field label="Conclusion" htmlFor="conclusion" error={errors.conclusion?.message}>
+            <RichTextEditor
+              id="conclusion"
+              value={watch('conclusion') ?? ''}
+              onChange={(html) =>
+                setValue('conclusion', html, { shouldDirty: true, shouldValidate: true })
+              }
+              invalid={!!errors.conclusion}
+              placeholder="Wrap up the article…"
+            />
+          </Field>
+        </Section>
+
+        <Section title="Settings" accent="emerald">
+          <Field label="Related Course(s)" error={errors.relatedCourseIds?.message as string}>
+            <MultiSelect
+              options={(courses?.data ?? []).map((course) => ({
+                value: course.id,
+                label: course.title,
+              }))}
+              value={watch('relatedCourseIds')}
+              onChange={(next) => setValue('relatedCourseIds', next, { shouldDirty: true })}
+              placeholder="Select related course(s)…"
+              emptyText="No courses available."
+            />
+          </Field>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex items-center justify-between rounded-lg border border-input bg-background px-3 py-2">
+              <Label htmlFor="showOnHomepage">Show on HomePage</Label>
+              <Switch
+                id="showOnHomepage"
+                checked={watch('showOnHomepage')}
+                onCheckedChange={(v) => setValue('showOnHomepage', v)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-input bg-background px-3 py-2">
+              <div>
+                <Label htmlFor="isPublished">Status</Label>
+                <p className="text-xs text-muted-foreground">
+                  {watch('isPublished') ? 'Published' : 'Draft'}
+                </p>
+              </div>
+              <Switch
+                id="isPublished"
+                checked={watch('isPublished')}
+                onCheckedChange={(v) => setValue('isPublished', v)}
+              />
+            </div>
+          </div>
+        </Section>
+      </div>
       </div>
     </form>
   )

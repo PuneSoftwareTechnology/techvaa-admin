@@ -104,6 +104,7 @@ export default function BlogsPage() {
         formId={FORM_ID}
         isSubmitting={c.isSubmitting}
         submitLabel={c.editing ? 'Save changes' : 'Create post'}
+        className="w-[90vw] sm:max-w-[90vw]"
       >
         <BlogForm
           formId={FORM_ID}
@@ -117,19 +118,19 @@ export default function BlogsPage() {
                   introduction: c.editing.introduction,
                   primaryTitle: c.editing.primaryTitle ?? '',
                   primaryIntro: c.editing.primaryIntro ?? '',
-                  primaryImage: c.editing.primaryImage ?? '',
                   primaryText: c.editing.primaryText ?? '',
                   secondaryTitle: c.editing.secondaryTitle ?? '',
                   secondaryIntro: c.editing.secondaryIntro ?? '',
-                  secondaryImage: c.editing.secondaryImage ?? '',
                   secondaryText: c.editing.secondaryText ?? '',
                   tertiaryTitle: c.editing.tertiaryTitle ?? '',
                   tertiaryIntro: c.editing.tertiaryIntro ?? '',
-                  tertiaryImage: c.editing.tertiaryImage ?? '',
                   tertiaryText: c.editing.tertiaryText ?? '',
                   tertiaryPoints: c.editing.tertiaryPoints ?? [],
                   conclusion: c.editing.conclusion ?? '',
-                  relatedCourseId: c.editing.relatedCourseId ?? '',
+                  relatedCourseIds:
+                    c.editing.relatedCourseIds ??
+                    c.editing.relatedCourses?.map((rc) => rc.id) ??
+                    [],
                   showOnHomepage: c.editing.showOnHomepage,
                   isPublished: c.editing.isPublished,
                 }

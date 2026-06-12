@@ -146,17 +146,14 @@ export interface Blog extends Timestamps {
 
   primaryTitle?: string | null
   primaryIntro?: string | null
-  primaryImage?: string | null
   primaryText?: string | null
 
   secondaryTitle?: string | null
   secondaryIntro?: string | null
-  secondaryImage?: string | null
   secondaryText?: string | null
 
   tertiaryTitle?: string | null
   tertiaryIntro?: string | null
-  tertiaryImage?: string | null
   tertiaryText?: string | null
   tertiaryPoints: string[]
 
@@ -165,8 +162,8 @@ export interface Blog extends Timestamps {
   showOnHomepage: boolean
   isPublished: boolean
   publishedAt?: ISODateString | null
-  relatedCourseId?: string | null
-  relatedCourse?: Pick<Course, 'id' | 'title' | 'slug'> | null
+  relatedCourseIds?: string[]
+  relatedCourses?: Pick<Course, 'id' | 'title' | 'slug'>[]
   seo?: SeoMetadata | null
 }
 

@@ -9,6 +9,7 @@ import type {
   Media,
   Placement,
   Review,
+  Testimonial,
 } from '@/types/domain'
 import { MockCollection } from './collection'
 import { SEED_USERS, type MockUser } from './seed-users'
@@ -23,6 +24,7 @@ import {
   MEDIA_SEED,
   PLACEMENT_SEED,
   REVIEW_SEED,
+  TESTIMONIAL_SEED,
 } from './seeds'
 
 /**
@@ -49,6 +51,10 @@ export const mockDb = {
   reviews: new MockCollection<Review>(REVIEW_SEED, {
     idPrefix: 'rev',
     searchFields: ['studentName', 'company', 'review'],
+  }),
+  testimonials: new MockCollection<Testimonial>(TESTIMONIAL_SEED, {
+    idPrefix: 'tst',
+    searchFields: ['name', 'company', 'role', 'message'],
   }),
   placements: new MockCollection<Placement>(PLACEMENT_SEED, {
     idPrefix: 'plc',

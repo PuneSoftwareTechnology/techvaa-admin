@@ -21,6 +21,9 @@ const CourseBatchesPage = lazy(
 )
 const BlogsPage = lazy(() => import('@/modules/blogs/pages/blogs-page'))
 const ReviewsPage = lazy(() => import('@/modules/reviews/pages/reviews-page'))
+const TestimonialsPage = lazy(
+  () => import('@/modules/testimonials/pages/testimonials-page'),
+)
 const PlacementsPage = lazy(
   () => import('@/modules/placements/pages/placements-page'),
 )
@@ -96,6 +99,14 @@ export function AppRoutes() {
               element={
                 <RequirePermission permission="reviews">
                   <ReviewsPage />
+                </RequirePermission>
+              }
+            />
+            <Route
+              path="testimonials"
+              element={
+                <RequirePermission permission="testimonials">
+                  <TestimonialsPage />
                 </RequirePermission>
               }
             />

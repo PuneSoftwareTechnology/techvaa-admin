@@ -38,6 +38,12 @@ export const queryKeys = {
     list: (params?: ListParams) => ['reviews', 'list', params ?? {}] as const,
     detail: (id: string) => ['reviews', 'detail', id] as const,
   },
+  testimonials: {
+    all: ['testimonials'] as const,
+    list: (params?: ListParams) =>
+      ['testimonials', 'list', params ?? {}] as const,
+    detail: (id: string) => ['testimonials', 'detail', id] as const,
+  },
   placements: {
     all: ['placements'] as const,
     list: (params?: ListParams) => ['placements', 'list', params ?? {}] as const,

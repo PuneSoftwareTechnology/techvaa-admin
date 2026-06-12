@@ -57,6 +57,12 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     description: 'Manage student reviews and ratings.',
     to: '/reviews',
   },
+  testimonials: {
+    key: 'testimonials',
+    label: 'Testimonials',
+    description: 'Curate featured success stories and video testimonials.',
+    to: '/testimonials',
+  },
   placements: {
     key: 'placements',
     label: 'Placements',
@@ -114,6 +120,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'blogs',
     'faqs',
     'reviews',
+    'testimonials',
     'placements',
     'media',
   ],

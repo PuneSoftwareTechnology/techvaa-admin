@@ -3,6 +3,7 @@ import {
   GraduationCap,
   Newspaper,
   Star,
+  Quote,
   Briefcase,
   HelpCircle,
   ListChecks,
@@ -83,6 +84,13 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Star,
     group: 'Social proof',
     permission: 'reviews',
+  },
+  {
+    title: 'Testimonials',
+    to: '/testimonials',
+    icon: Quote,
+    group: 'Social proof',
+    permission: 'testimonials',
   },
   {
     title: 'Placements',

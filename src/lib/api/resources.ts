@@ -208,6 +208,26 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     filters: { isPublished: { kind: "boolean" } },
   },
 
+  testimonials: {
+    model: "testimonial",
+    label: "Testimonial",
+    searchable: ["name", "company", "role"],
+    sortable: ["createdAt", "isPublished"],
+    defaultSort: "createdAt",
+    softDelete: true,
+    writable: [
+      "name",
+      "role",
+      "company",
+      "message",
+      "image",
+      "videoUrl",
+      "isPublished",
+    ],
+    nullableBlanks: ["role", "company", "image", "videoUrl"],
+    filters: { isPublished: { kind: "boolean" } },
+  },
+
   placements: {
     model: "placement",
     label: "Placement",

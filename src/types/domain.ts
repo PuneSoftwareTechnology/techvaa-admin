@@ -26,6 +26,7 @@ export const PERMISSIONS = [
   'blogs',
   'faqs',
   'reviews',
+  'testimonials',
   'placements',
   'media',
   'seo',
@@ -174,6 +175,17 @@ export interface Review extends Timestamps {
   rating: number
   review: string
   image?: string | null
+  isPublished: boolean
+}
+
+export interface Testimonial extends Timestamps {
+  id: string
+  name: string
+  role?: string | null
+  company?: string | null
+  message: string
+  image?: string | null
+  videoUrl?: string | null
   isPublished: boolean
 }
 

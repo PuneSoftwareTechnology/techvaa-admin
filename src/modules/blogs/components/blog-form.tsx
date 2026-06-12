@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select'
 import { courseHooks } from '@/modules/courses/hooks/use-courses'
 import { ImageUpload } from '@/components/forms/image-upload'
+import { RichTextEditor } from '@/components/forms/rich-text-editor'
 import {
   blogSchema,
   BLOG_DEFAULTS,
@@ -100,7 +101,17 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
         required
         error={errors.introduction?.message}
       >
-        <Textarea id="introduction" rows={3} {...register('introduction')} />
+        <RichTextEditor
+          id="introduction"
+          value={watch('introduction')}
+          onChange={(html) =>
+            setValue('introduction', html, { shouldDirty: true, shouldValidate: true })
+          }
+          invalid={!!errors.introduction}
+          placeholder="Write the introduction…"
+          uploadFolder="blogs"
+          uploadSlug={slug}
+        />
       </Field>
 
       {/* Templated content blocks */}
@@ -128,7 +139,16 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
           </Field>
 
           <Field label={`${label} Content Text`} error={errors[`${key}Text`]?.message}>
-            <Textarea rows={4} {...register(`${key}Text`)} />
+            <RichTextEditor
+              value={watch(`${key}Text`) ?? ''}
+              onChange={(html) =>
+                setValue(`${key}Text`, html, { shouldDirty: true, shouldValidate: true })
+              }
+              invalid={!!errors[`${key}Text`]}
+              placeholder={`Write the ${label.toLowerCase()} content…`}
+              uploadFolder="blogs"
+              uploadSlug={slug}
+            />
           </Field>
 
           {/* Bullet points live only on the tertiary block */}
@@ -167,7 +187,17 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
       ))}
 
       <Field label="Conclusion" htmlFor="conclusion" error={errors.conclusion?.message}>
-        <Textarea id="conclusion" rows={3} {...register('conclusion')} />
+        <RichTextEditor
+          id="conclusion"
+          value={watch('conclusion') ?? ''}
+          onChange={(html) =>
+            setValue('conclusion', html, { shouldDirty: true, shouldValidate: true })
+          }
+          invalid={!!errors.conclusion}
+          placeholder="Wrap up the article…"
+          uploadFolder="blogs"
+          uploadSlug={slug}
+        />
       </Field>
 
       <Field label="Related Course" error={errors.relatedCourseId?.message}>

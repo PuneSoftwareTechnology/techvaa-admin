@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Field } from '@/components/forms/field'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { RichTextEditor } from '@/components/forms/rich-text-editor'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -50,7 +50,15 @@ export function FaqForm({ formId, defaultValues, onSubmit }: FaqFormProps) {
       </Field>
 
       <Field label="Answer" htmlFor="answer" required error={errors.answer?.message}>
-        <Textarea id="answer" rows={4} {...register('answer')} />
+        <RichTextEditor
+          id="answer"
+          value={watch('answer')}
+          onChange={(html) =>
+            setValue('answer', html, { shouldDirty: true, shouldValidate: true })
+          }
+          invalid={!!errors.answer}
+          placeholder="Write the answer…"
+        />
       </Field>
 
       <div className="grid grid-cols-2 items-end gap-4">

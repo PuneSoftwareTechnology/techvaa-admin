@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { requiredRichText } from '@/lib/rich-text'
 import {
   entitySeoSchema,
   ENTITY_SEO_DEFAULTS,
@@ -11,7 +12,7 @@ const bulletList = z.array(z.string().trim().min(1))
 export const courseSchema = z.object({
   title: z.string().min(3, 'Title is required'),
   slug: z.string().min(3, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and hyphens only'),
-  description: z.string().min(10, 'Description is required'),
+  description: requiredRichText(10, 'Description is required'),
   intro: bulletList,
   modules: bulletList,
   prerequisites: bulletList,

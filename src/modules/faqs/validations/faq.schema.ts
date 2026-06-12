@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
+import { requiredRichText } from '@/lib/rich-text'
+
 export const faqSchema = z.object({
   question: z.string().min(5, 'Question must be at least 5 characters'),
-  answer: z.string().min(5, 'Answer must be at least 5 characters'),
+  answer: requiredRichText(5, 'Answer must be at least 5 characters'),
   sortOrder: z
     .number({ message: 'Enter a number' })
     .int()

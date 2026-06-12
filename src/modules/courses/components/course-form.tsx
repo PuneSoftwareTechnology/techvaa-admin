@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { MultiSelect } from '@/components/forms/multi-select'
 import { BulletListInput } from '@/components/forms/bullet-list-input'
 import { ImageUpload } from '@/components/forms/image-upload'
+import { RichTextEditor } from '@/components/forms/rich-text-editor'
 import { EntitySeoSection } from '@/modules/seo/components/entity-seo-section'
 import { courseHooks } from '../hooks/use-courses'
 import {
@@ -66,7 +67,17 @@ export function CourseForm({
       </Field>
 
       <Field label="Description" htmlFor="description" required error={errors.description?.message}>
-        <Textarea id="description" rows={5} {...register('description')} />
+        <RichTextEditor
+          id="description"
+          value={watch('description')}
+          onChange={(html) =>
+            setValue('description', html, { shouldDirty: true, shouldValidate: true })
+          }
+          invalid={!!errors.description}
+          placeholder="Describe the course…"
+          uploadFolder="courses"
+          uploadSlug={watch('slug')}
+        />
       </Field>
 
       <Field

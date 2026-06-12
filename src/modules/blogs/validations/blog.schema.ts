@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { requiredRichText } from '@/lib/rich-text'
+
 const optionalText = z.string().optional().or(z.literal(''))
 const optionalImage = z.string().url('Enter a valid URL').optional().or(z.literal(''))
 
@@ -11,7 +13,7 @@ export const blogSchema = z.object({
     .regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and hyphens only'),
   metaDescription: z.string().max(160, 'Keep it under 160 characters').optional().or(z.literal('')),
   featuredImage: optionalImage,
-  introduction: z.string().min(20, 'Introduction is required'),
+  introduction: requiredRichText(20, 'Introduction is required'),
 
   // Primary content block
   primaryTitle: optionalText,

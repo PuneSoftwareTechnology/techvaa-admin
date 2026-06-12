@@ -22,14 +22,14 @@ export const PERMISSIONS = [
   'leads',
   'courseEnquiries',
   'courses',
+  'curriculum',
   'blogs',
   'faqs',
   'reviews',
   'placements',
   'media',
   'seo',
-  'batchScheduleHome',
-  'batchScheduleCourse',
+  'batchSchedule',
   'credentials',
 ] as const
 export type Permission = (typeof PERMISSIONS)[number]
@@ -87,13 +87,11 @@ export interface Course extends Timestamps {
   id: string
   title: string
   slug: string
+  /** Short blurb shown on course cards. */
+  shortDescription?: string | null
   description: string
-  /** Bullet-point course introduction. */
-  intro: string[]
-  /** Bullet-point list of modules / curriculum. */
-  modules: string[]
-  /** Bullet-point list of prerequisites. */
-  prerequisites: string[]
+  /** Human-readable length, e.g. "6 weeks", "40 hours". */
+  duration?: string | null
   image?: string | null
   isFeatured: boolean
   isPublished: boolean
@@ -101,7 +99,37 @@ export interface Course extends Timestamps {
   relatedCourses?: Pick<Course, 'id' | 'title' | 'slug'>[]
   /** Flattened related-course ids (derived server-side for the form). */
   relatedCourseIds?: string[]
+  /** Ordered key-curriculum items (included on reads). */
+  curriculum?: CurriculumItem[]
+  /** Upcoming batches for this course (included on reads). */
+  batches?: CourseBatch[]
   seo?: SeoMetadata | null
+}
+
+/** A single Key-Curriculum row (heading + description), attached to a course. */
+export interface CurriculumItem {
+  id: string
+  courseId: string
+  heading: string
+  description: string
+  order: number
+  createdAt: ISODateString
+  /** Parent course (included on reads). */
+  course?: Pick<Course, 'id' | 'title' | 'slug'>
+}
+
+/** An upcoming batch / new batch schedule for a course. */
+export interface CourseBatch {
+  id: string
+  courseId: string
+  startDate: ISODateString
+  duration: string
+  isOpen: boolean
+  /** Also surface this batch in the home-page upcoming-batches table. */
+  showOnHomepage: boolean
+  createdAt: ISODateString
+  /** Parent course (included on reads). */
+  course?: Pick<Course, 'id' | 'title' | 'slug'>
 }
 
 export interface Blog extends Timestamps {

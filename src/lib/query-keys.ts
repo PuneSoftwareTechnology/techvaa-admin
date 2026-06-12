@@ -22,6 +22,17 @@ export const queryKeys = {
     list: (params?: ListParams) => ['blogs', 'list', params ?? {}] as const,
     detail: (id: string) => ['blogs', 'detail', id] as const,
   },
+  curriculum: {
+    all: ['curriculum'] as const,
+    list: (params?: ListParams) => ['curriculum', 'list', params ?? {}] as const,
+    detail: (id: string) => ['curriculum', 'detail', id] as const,
+  },
+  courseBatches: {
+    all: ['courseBatches'] as const,
+    list: (params?: ListParams) =>
+      ['courseBatches', 'list', params ?? {}] as const,
+    detail: (id: string) => ['courseBatches', 'detail', id] as const,
+  },
   reviews: {
     all: ['reviews'] as const,
     list: (params?: ListParams) => ['reviews', 'list', params ?? {}] as const,

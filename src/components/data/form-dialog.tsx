@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface FormDialogProps {
   open: boolean
@@ -44,16 +45,19 @@ export function FormDialog({
   return (
     <Dialog open={open} onOpenChange={(o) => !isSubmitting && onOpenChange(o)}>
       <DialogContent
-        className={className ?? 'max-h-[90svh] overflow-y-auto sm:max-w-2xl'}
+        className={cn(
+          'flex max-h-[90svh] flex-col overflow-hidden sm:max-w-2xl',
+          className,
+        )}
       >
-        <DialogHeader>
+        <DialogHeader className="shrink-0">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
 
-        {children}
+        <div className="-mx-5 flex-1 overflow-y-auto px-5">{children}</div>
 
-        <DialogFooter>
+        <DialogFooter className="shrink-0 border-t border-border pt-4">
           <Button
             type="button"
             variant="outline"

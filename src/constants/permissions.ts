@@ -33,6 +33,12 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     description: 'Create and publish training courses.',
     to: '/courses',
   },
+  curriculum: {
+    key: 'curriculum',
+    label: 'Curriculum',
+    description: 'Manage key-curriculum items shown on course pages.',
+    to: '/curriculum',
+  },
   blogs: {
     key: 'blogs',
     label: 'Blogs',
@@ -69,17 +75,12 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     description: 'Manage SEO metadata.',
     to: '/seo',
   },
-  batchScheduleHome: {
-    key: 'batchScheduleHome',
-    label: 'Batch Schedule — Home',
-    description: 'Manage the upcoming-batches schedule shown on the home page.',
-    to: '/batch-schedule/home',
-  },
-  batchScheduleCourse: {
-    key: 'batchScheduleCourse',
-    label: 'Batch Schedule — Course',
-    description: 'Manage the per-course batch schedule shown on course pages.',
-    to: '/batch-schedule/course',
+  batchSchedule: {
+    key: 'batchSchedule',
+    label: 'Batch Schedule',
+    description:
+      'Manage upcoming batches shown on course pages and the home page.',
+    to: '/batch-schedule',
   },
   credentials: {
     key: 'credentials',
@@ -105,8 +106,17 @@ export const GRANTABLE_PERMISSIONS: PermissionMeta[] = PERMISSIONS.map(
  */
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   SUPER_ADMIN: [...PERMISSIONS],
-  ADMIN: ['courseEnquiries', 'blogs', 'batchScheduleHome', 'batchScheduleCourse'],
-  CONTENT_MANAGER: ['courses', 'blogs', 'faqs', 'reviews', 'placements', 'media'],
+  ADMIN: ['courseEnquiries', 'blogs', 'batchSchedule'],
+  CONTENT_MANAGER: [
+    'courses',
+    'curriculum',
+    'batchSchedule',
+    'blogs',
+    'faqs',
+    'reviews',
+    'placements',
+    'media',
+  ],
   SEO_MANAGER: ['seo'],
 }
 

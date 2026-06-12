@@ -13,6 +13,12 @@ const DashboardPage = lazy(
   () => import('@/modules/dashboard/pages/dashboard-page'),
 )
 const CoursesPage = lazy(() => import('@/modules/courses/pages/courses-page'))
+const CurriculumPage = lazy(
+  () => import('@/modules/curriculum/pages/curriculum-page'),
+)
+const CourseBatchesPage = lazy(
+  () => import('@/modules/course-batches/pages/course-batches-page'),
+)
 const BlogsPage = lazy(() => import('@/modules/blogs/pages/blogs-page'))
 const ReviewsPage = lazy(() => import('@/modules/reviews/pages/reviews-page'))
 const PlacementsPage = lazy(
@@ -51,6 +57,31 @@ export function AppRoutes() {
                   <CoursesPage />
                 </RequirePermission>
               }
+            />
+            <Route
+              path="curriculum"
+              element={
+                <RequirePermission permission="curriculum">
+                  <CurriculumPage />
+                </RequirePermission>
+              }
+            />
+            <Route
+              path="batch-schedule"
+              element={
+                <RequirePermission permission="batchSchedule">
+                  <CourseBatchesPage />
+                </RequirePermission>
+              }
+            />
+            {/* Old split routes now collapse into the single toggled page. */}
+            <Route
+              path="batch-schedule/home"
+              element={<Navigate to="/batch-schedule" replace />}
+            />
+            <Route
+              path="batch-schedule/course"
+              element={<Navigate to="/batch-schedule" replace />}
             />
             <Route
               path="blogs"

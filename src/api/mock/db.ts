@@ -1,7 +1,9 @@
 import type {
   Blog,
   Course,
+  CourseBatch,
   CourseEnquiry,
+  CurriculumItem,
   Faq,
   Lead,
   Media,
@@ -12,8 +14,10 @@ import { MockCollection } from './collection'
 import { SEED_USERS, type MockUser } from './seed-users'
 import {
   BLOG_SEED,
+  COURSE_BATCH_SEED,
   COURSE_ENQUIRY_SEED,
   COURSE_SEED,
+  CURRICULUM_SEED,
   FAQ_SEED,
   LEAD_SEED,
   MEDIA_SEED,
@@ -29,6 +33,14 @@ export const mockDb = {
   courses: new MockCollection<Course>(COURSE_SEED, {
     idPrefix: 'crs',
     searchFields: ['title', 'slug'],
+  }),
+  curriculumItems: new MockCollection<CurriculumItem>(CURRICULUM_SEED, {
+    idPrefix: 'cur',
+    searchFields: ['heading', 'description'],
+  }),
+  courseBatches: new MockCollection<CourseBatch>(COURSE_BATCH_SEED, {
+    idPrefix: 'bat',
+    searchFields: ['duration'],
   }),
   blogs: new MockCollection<Blog>(BLOG_SEED, {
     idPrefix: 'blg',

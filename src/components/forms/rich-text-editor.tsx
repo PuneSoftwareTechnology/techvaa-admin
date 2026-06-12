@@ -293,6 +293,21 @@ function Toolbar({
       editor.chain().focus().extendMarkRange('link').unsetLink().run()
       return
     }
+    const { from, to } = editor.state.selection
+    if (from === to && !editor.isActive('link')) {
+      // No text selected — insert the URL itself as the linked text, otherwise
+      // TipTap only sets a stored mark and nothing visible appears.
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'text',
+          text: url,
+          marks: [{ type: 'link', attrs: { href: url } }],
+        })
+        .run()
+      return
+    }
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
   }
 

@@ -82,15 +82,14 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     writable: [
       "title",
       "slug",
+      "shortDescription",
       "description",
-      "intro",
-      "modules",
-      "prerequisites",
+      "duration",
       "image",
       "isFeatured",
       "isPublished",
     ],
-    nullableBlanks: ["image"],
+    nullableBlanks: ["shortDescription", "duration", "image"],
     include: {
       seo: true,
       relatedCourses: { select: { id: true, title: true, slug: true } },
@@ -107,6 +106,50 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     filters: {
       isPublished: { kind: "boolean" },
       isFeatured: { kind: "boolean" },
+    },
+  },
+
+  // Key-curriculum rows, each linked to a single course via courseId.
+  "curriculum-items": {
+    model: "curriculumItem",
+    label: "Curriculum item",
+    searchable: ["heading", "description"],
+    sortable: ["order", "createdAt", "heading"],
+    defaultSort: "order",
+    softDelete: false,
+    writable: ["courseId", "heading", "description", "order"],
+    coerce: { order: "int" },
+    include: {
+      course: { select: { id: true, title: true, slug: true } },
+    },
+    filters: {
+      courseId: { kind: "eq" },
+    },
+  },
+
+  // Upcoming batches, each linked to a single course via courseId.
+  "course-batches": {
+    model: "courseBatch",
+    label: "Batch",
+    searchable: ["duration"],
+    sortable: ["startDate", "createdAt"],
+    defaultSort: "startDate",
+    softDelete: false,
+    writable: [
+      "courseId",
+      "startDate",
+      "duration",
+      "isOpen",
+      "showOnHomepage",
+    ],
+    coerce: { startDate: "date" },
+    include: {
+      course: { select: { id: true, title: true, slug: true } },
+    },
+    filters: {
+      courseId: { kind: "eq" },
+      isOpen: { kind: "boolean" },
+      showOnHomepage: { kind: "boolean" },
     },
   },
 

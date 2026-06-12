@@ -1,49 +1,41 @@
 import type { ReactNode } from 'react'
-import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from 'lucide-react'
+import { PencilIcon, Trash2Icon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 interface RowActionsProps {
   onEdit?: () => void
   onDelete?: () => void
-  /** Extra items rendered above edit/delete. */
+  /** Extra actions rendered before edit/delete. */
   children?: ReactNode
 }
 
-/** Standard "⋯" row menu with optional edit/delete and custom items. */
+/** Standard row actions rendered as side-by-side icon buttons. */
 export function RowActions({ onEdit, onDelete, children }: RowActionsProps) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" aria-label="Row actions">
-          <MoreHorizontalIcon className="size-4" />
+    <div className="flex items-center justify-end gap-1">
+      {children}
+      {onEdit && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Edit"
+          onClick={onEdit}
+        >
+          <PencilIcon className="size-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        {children}
-        {onEdit && (
-          <DropdownMenuItem onSelect={onEdit}>
-            <PencilIcon />
-            Edit
-          </DropdownMenuItem>
-        )}
-        {onDelete && (
-          <>
-            {(children || onEdit) && <DropdownMenuSeparator />}
-            <DropdownMenuItem variant="destructive" onSelect={onDelete}>
-              <Trash2Icon />
-              Delete
-            </DropdownMenuItem>
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      )}
+      {onDelete && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Delete"
+          className="text-destructive hover:text-destructive"
+          onClick={onDelete}
+        >
+          <Trash2Icon className="size-4" />
+        </Button>
+      )}
+    </div>
   )
 }

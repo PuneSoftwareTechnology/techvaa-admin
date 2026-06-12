@@ -5,13 +5,13 @@ import {
   Star,
   Briefcase,
   HelpCircle,
+  ListChecks,
   Inbox,
   ClipboardList,
   Images,
   Search,
   ShieldCheck,
   CalendarClock,
-  CalendarDays,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -56,6 +56,13 @@ export const NAV_ITEMS: NavItem[] = [
     permission: 'courses',
   },
   {
+    title: 'Curriculum',
+    to: '/curriculum',
+    icon: ListChecks,
+    group: 'Content',
+    permission: 'curriculum',
+  },
+  {
     title: 'Blogs',
     to: '/blogs',
     icon: Newspaper,
@@ -86,18 +93,11 @@ export const NAV_ITEMS: NavItem[] = [
   },
 
   {
-    title: 'Batch Schedule — Home',
-    to: '/batch-schedule/home',
+    title: 'Batch Schedule',
+    to: '/batch-schedule',
     icon: CalendarClock,
     group: 'Schedule',
-    permission: 'batchScheduleHome',
-  },
-  {
-    title: 'Batch Schedule — Course',
-    to: '/batch-schedule/course',
-    icon: CalendarDays,
-    group: 'Schedule',
-    permission: 'batchScheduleCourse',
+    permission: 'batchSchedule',
   },
 
   {

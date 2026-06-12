@@ -1,7 +1,9 @@
 import type {
   Blog,
   Course,
+  CourseBatch,
   CourseEnquiry,
+  CurriculumItem,
   Faq,
   Lead,
   Media,
@@ -14,14 +16,49 @@ const base = Date.UTC(2026, 4, 1) // 2026-05-01
 function daysAgo(days: number): string {
   return new Date(base - days * 86_400_000).toISOString()
 }
+/** Deterministic ISO date `days` in the future (for upcoming batches). */
+function daysAhead(days: number): string {
+  return daysAgo(-days)
+}
+/** Stable random-ish placeholder image keyed by slug. */
+function img(seed: string): string {
+  return `https://picsum.photos/seed/${seed}/640/400`
+}
 
 export const COURSE_SEED: Course[] = [
-  { id: 'crs_fico', title: 'SAP FICO (Financial Accounting & Controlling)', slug: 'sap-fico', description: 'Comprehensive SAP FICO training covering GL, AP, AR, asset accounting, cost centre and profit centre accounting with hands-on S/4HANA practice.', intro: ['Master financial accounting and controlling in SAP S/4HANA', 'Hands-on practice on a live S/4HANA environment'], modules: ['General Ledger (GL)', 'Accounts Payable & Receivable', 'Asset Accounting', 'Cost & Profit Centre Accounting'], prerequisites: ['Basic accounting knowledge'], relatedCourseIds: ['crs_mm', 'crs_sd'], image: null, isFeatured: true, isPublished: true, createdAt: daysAgo(80), updatedAt: daysAgo(5) },
-  { id: 'crs_mm', title: 'SAP MM (Materials Management)', slug: 'sap-mm', description: 'End-to-end procurement, inventory, and invoice verification processes in SAP MM with real configuration exercises.', intro: ['Procurement and inventory management in SAP'], modules: ['Procurement Process', 'Inventory Management', 'Invoice Verification'], prerequisites: [], relatedCourseIds: ['crs_sd'], image: null, isFeatured: true, isPublished: true, createdAt: daysAgo(75), updatedAt: daysAgo(8) },
-  { id: 'crs_abap', title: 'SAP ABAP Development', slug: 'sap-abap', description: 'Learn ABAP programming, reports, ALV, BAPIs, BADIs, enhancements and OData services for SAP development roles.', intro: ['Build custom SAP applications with ABAP'], modules: ['ABAP Basics', 'Reports & ALV', 'BAPIs & BADIs', 'OData Services'], prerequisites: ['Any programming background'], relatedCourseIds: [], image: null, isFeatured: true, isPublished: true, createdAt: daysAgo(70), updatedAt: daysAgo(12) },
-  { id: 'crs_sd', title: 'SAP SD (Sales & Distribution)', slug: 'sap-sd', description: 'Master the order-to-cash cycle, pricing, billing and shipping in SAP SD.', intro: ['Order-to-cash processes in SAP'], modules: ['Order Management', 'Pricing', 'Billing & Shipping'], prerequisites: [], relatedCourseIds: ['crs_mm'], image: null, isFeatured: false, isPublished: true, createdAt: daysAgo(60), updatedAt: daysAgo(15) },
-  { id: 'crs_hana', title: 'SAP S/4HANA Foundation', slug: 'sap-s4hana-foundation', description: 'A foundational overview of SAP S/4HANA architecture, Fiori, and core business processes for all levels.', intro: ['Get started with the SAP S/4HANA suite'], modules: ['S/4HANA Architecture', 'SAP Fiori', 'Core Business Processes'], prerequisites: [], relatedCourseIds: [], image: null, isFeatured: false, isPublished: true, createdAt: daysAgo(45), updatedAt: daysAgo(9) },
-  { id: 'crs_basis', title: 'SAP BASIS Administration', slug: 'sap-basis', description: 'System administration, transport management, user roles and performance tuning for SAP BASIS consultants.', intro: ['Administer and maintain SAP systems'], modules: ['System Administration', 'Transport Management', 'User Roles', 'Performance Tuning'], prerequisites: ['Basic OS and networking knowledge'], relatedCourseIds: [], image: null, isFeatured: false, isPublished: false, createdAt: daysAgo(20), updatedAt: daysAgo(2) },
+  { id: 'crs_fico', title: 'SAP FICO (Financial Accounting & Controlling)', slug: 'sap-fico', shortDescription: 'Master financial accounting and controlling in SAP S/4HANA with hands-on labs.', description: 'Comprehensive SAP FICO training covering GL, AP, AR, asset accounting, cost centre and profit centre accounting with hands-on S/4HANA practice.', duration: '8 weeks', relatedCourseIds: ['crs_mm', 'crs_sd'], image: img('sap-fico'), isFeatured: true, isPublished: true, createdAt: daysAgo(80), updatedAt: daysAgo(5) },
+  { id: 'crs_mm', title: 'SAP MM (Materials Management)', slug: 'sap-mm', shortDescription: 'End-to-end procurement, inventory and invoice verification in SAP MM.', description: 'End-to-end procurement, inventory, and invoice verification processes in SAP MM with real configuration exercises.', duration: '6 weeks', relatedCourseIds: ['crs_sd'], image: img('sap-mm'), isFeatured: true, isPublished: true, createdAt: daysAgo(75), updatedAt: daysAgo(8) },
+  { id: 'crs_abap', title: 'SAP ABAP Development', slug: 'sap-abap', shortDescription: 'Build custom SAP applications with ABAP — reports, BAPIs, OData and more.', description: 'Learn ABAP programming, reports, ALV, BAPIs, BADIs, enhancements and OData services for SAP development roles.', duration: '10 weeks', relatedCourseIds: [], image: img('sap-abap'), isFeatured: true, isPublished: true, createdAt: daysAgo(70), updatedAt: daysAgo(12) },
+  { id: 'crs_sd', title: 'SAP SD (Sales & Distribution)', slug: 'sap-sd', shortDescription: 'Own the order-to-cash cycle — pricing, billing and shipping in SAP SD.', description: 'Master the order-to-cash cycle, pricing, billing and shipping in SAP SD.', duration: '6 weeks', relatedCourseIds: ['crs_mm'], image: img('sap-sd'), isFeatured: false, isPublished: true, createdAt: daysAgo(60), updatedAt: daysAgo(15) },
+  { id: 'crs_hana', title: 'SAP S/4HANA Foundation', slug: 'sap-s4hana-foundation', shortDescription: 'Get started with the SAP S/4HANA suite, Fiori and core business processes.', description: 'A foundational overview of SAP S/4HANA architecture, Fiori, and core business processes for all levels.', duration: '4 weeks', relatedCourseIds: [], image: img('sap-hana'), isFeatured: false, isPublished: true, createdAt: daysAgo(45), updatedAt: daysAgo(9) },
+  { id: 'crs_basis', title: 'SAP BASIS Administration', slug: 'sap-basis', shortDescription: 'Administer and maintain SAP systems — transports, roles and tuning.', description: 'System administration, transport management, user roles and performance tuning for SAP BASIS consultants.', duration: '8 weeks', relatedCourseIds: [], image: img('sap-basis'), isFeatured: false, isPublished: false, createdAt: daysAgo(20), updatedAt: daysAgo(2) },
+  { id: 'crs_hr', title: 'SAP SuccessFactors (HCM)', slug: 'sap-successfactors', shortDescription: 'Cloud HR with SAP SuccessFactors — Employee Central, recruiting and onboarding.', description: 'Hands-on SAP SuccessFactors training across Employee Central, Recruiting, Onboarding and Performance & Goals modules.', duration: '7 weeks', relatedCourseIds: ['crs_fico'], image: img('sap-successfactors'), isFeatured: true, isPublished: true, createdAt: daysAgo(38), updatedAt: daysAgo(4) },
+  { id: 'crs_ariba', title: 'SAP Ariba', slug: 'sap-ariba', shortDescription: 'Source-to-pay and supplier management on the SAP Ariba network.', description: 'Learn source-to-pay, procurement, contract management and supplier collaboration on the SAP Ariba cloud platform.', duration: '5 weeks', relatedCourseIds: ['crs_mm'], image: img('sap-ariba'), isFeatured: false, isPublished: true, createdAt: daysAgo(30), updatedAt: daysAgo(6) },
+  { id: 'crs_bw', title: 'SAP BW/4HANA Analytics', slug: 'sap-bw4hana', shortDescription: 'Data warehousing and reporting with SAP BW/4HANA.', description: 'Design data models, build extractors and deliver reporting with SAP BW/4HANA and embedded analytics.', duration: '9 weeks', relatedCourseIds: ['crs_hana'], image: img('sap-bw'), isFeatured: false, isPublished: false, createdAt: daysAgo(12), updatedAt: daysAgo(1) },
+]
+
+export const CURRICULUM_SEED: CurriculumItem[] = [
+  { id: 'cur_fico_1', courseId: 'crs_fico', heading: 'General Ledger (GL) Accounting', description: 'Chart of accounts, document types, posting keys and the new G/L in S/4HANA.', order: 1, createdAt: daysAgo(80) },
+  { id: 'cur_fico_2', courseId: 'crs_fico', heading: 'Accounts Payable & Receivable', description: 'Vendor and customer master data, invoice and payment processing, dunning.', order: 2, createdAt: daysAgo(80) },
+  { id: 'cur_fico_3', courseId: 'crs_fico', heading: 'Asset Accounting', description: 'Asset master records, depreciation areas and period-end asset processes.', order: 3, createdAt: daysAgo(80) },
+  { id: 'cur_fico_4', courseId: 'crs_fico', heading: 'Controlling (CO)', description: 'Cost centre and profit centre accounting, internal orders and reporting.', order: 4, createdAt: daysAgo(80) },
+  { id: 'cur_mm_1', courseId: 'crs_mm', heading: 'Procurement Process', description: 'Purchase requisitions, RFQs, purchase orders and the P2P cycle.', order: 1, createdAt: daysAgo(75) },
+  { id: 'cur_mm_2', courseId: 'crs_mm', heading: 'Inventory Management', description: 'Goods movements, stock types and physical inventory.', order: 2, createdAt: daysAgo(75) },
+  { id: 'cur_mm_3', courseId: 'crs_mm', heading: 'Invoice Verification', description: 'Logistics invoice verification and the three-way match.', order: 3, createdAt: daysAgo(75) },
+  { id: 'cur_abap_1', courseId: 'crs_abap', heading: 'ABAP Fundamentals', description: 'Data types, internal tables, control structures and the ABAP Dictionary.', order: 1, createdAt: daysAgo(70) },
+  { id: 'cur_abap_2', courseId: 'crs_abap', heading: 'Reports & ALV', description: 'Classical and interactive reports, ALV grid and list output.', order: 2, createdAt: daysAgo(70) },
+  { id: 'cur_abap_3', courseId: 'crs_abap', heading: 'BAPIs, BADIs & Enhancements', description: 'Enhancement framework, user exits, BADIs and remote-enabled BAPIs.', order: 3, createdAt: daysAgo(70) },
+  { id: 'cur_abap_4', courseId: 'crs_abap', heading: 'OData & RAP', description: 'Building OData services and an intro to the ABAP RESTful Application Model.', order: 4, createdAt: daysAgo(70) },
+]
+
+export const COURSE_BATCH_SEED: CourseBatch[] = [
+  { id: 'bat_fico_1', courseId: 'crs_fico', startDate: daysAhead(14), duration: '8 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(10) },
+  { id: 'bat_fico_2', courseId: 'crs_fico', startDate: daysAhead(45), duration: '8 weeks', isOpen: true, showOnHomepage: false, createdAt: daysAgo(8) },
+  { id: 'bat_mm_1', courseId: 'crs_mm', startDate: daysAhead(21), duration: '6 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(9) },
+  { id: 'bat_abap_1', courseId: 'crs_abap', startDate: daysAhead(7), duration: '10 weeks', isOpen: false, showOnHomepage: false, createdAt: daysAgo(12) },
+  { id: 'bat_abap_2', courseId: 'crs_abap', startDate: daysAhead(60), duration: '10 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(3) },
+  { id: 'bat_sd_1', courseId: 'crs_sd', startDate: daysAhead(30), duration: '6 weeks', isOpen: true, showOnHomepage: true, createdAt: daysAgo(5) },
+  { id: 'bat_hr_1', courseId: 'crs_hr', startDate: daysAhead(18), duration: '7 weeks', isOpen: true, showOnHomepage: false, createdAt: daysAgo(4) },
 ]
 
 export const BLOG_SEED: Blog[] = [

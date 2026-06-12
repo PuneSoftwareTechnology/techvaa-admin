@@ -16,6 +16,7 @@ import { type Course } from '@/types/domain'
 import { seoToFormValues } from '@/modules/seo/validations/entity-seo.schema'
 import { courseHooks } from '../hooks/use-courses'
 import { CourseForm } from '../components/course-form'
+import { CourseRelations } from '../components/course-relations'
 import { COURSE_DEFAULTS } from '../validations/course.schema'
 
 const FORM_ID = 'course-form'
@@ -26,6 +27,19 @@ export default function CoursesPage() {
     typeof COURSE_DEFAULTS,
     Partial<typeof COURSE_DEFAULTS>
   >(courseHooks, { sortBy: 'createdAt', sortOrder: 'desc' })
+
+  const createCourse = courseHooks.useCreate()
+
+  // On create we keep the dialog open and switch it into edit mode for the new
+  // course, so the linked-content panels (curriculum / batches / FAQs) unlock.
+  const handleSubmit = async (values: typeof COURSE_DEFAULTS) => {
+    if (c.editing) {
+      await c.submit(values, values)
+    } else {
+      const created = await createCourse.mutateAsync(values)
+      c.openEdit(created)
+    }
+  }
 
   const columns: DataTableColumn<Course>[] = [
     {
@@ -99,9 +113,9 @@ export default function CoursesPage() {
         title={c.editing ? 'Edit course' : 'New course'}
         description="Course details shown on the website."
         formId={FORM_ID}
-        isSubmitting={c.isSubmitting}
+        isSubmitting={c.isSubmitting || createCourse.isPending}
         submitLabel={c.editing ? 'Save changes' : 'Create course'}
-        className="max-h-[90svh] overflow-y-auto sm:max-w-3xl"
+        className="w-[90vw] sm:max-w-[90vw]"
       >
         <CourseForm
           formId={FORM_ID}
@@ -111,18 +125,28 @@ export default function CoursesPage() {
               ? {
                   title: c.editing.title,
                   slug: c.editing.slug,
+                  shortDescription: c.editing.shortDescription ?? '',
                   description: c.editing.description,
-                  intro: c.editing.intro ?? [],
-                  modules: c.editing.modules ?? [],
-                  prerequisites: c.editing.prerequisites ?? [],
+                  duration: c.editing.duration ?? '',
                   relatedCourseIds: c.editing.relatedCourseIds ?? [],
                   image: c.editing.image ?? '',
+                  isFeatured: c.editing.isFeatured,
                   isPublished: c.editing.isPublished,
                   seo: seoToFormValues(c.editing.seo),
                 }
               : undefined
           }
-          onSubmit={(values) => c.submit(values, values)}
+          aside={
+            <CourseRelations
+              courseId={c.editing?.id}
+              onUnlock={() =>
+                (
+                  document.getElementById(FORM_ID) as HTMLFormElement | null
+                )?.requestSubmit()
+              }
+            />
+          }
+          onSubmit={handleSubmit}
         />
       </FormDialog>
 

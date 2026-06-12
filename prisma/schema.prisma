@@ -82,22 +82,27 @@ model User {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Course {
-  id            String   @id @default(cuid())
-  title         String
-  slug          String   @unique
-  description   String // long-form (HTML / markdown)
-  intro         String[] @default([]) // bullet points — course introduction
-  modules       String[] @default([]) // bullet points — course modules / curriculum
-  prerequisites String[] @default([]) // bullet points — prerequisites
-  image         String?
-  isFeatured    Boolean  @default(false)
-  isPublished   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime?
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  shortDescription String? // used on course cards
+  description      String // long-form (HTML / markdown)
+  duration         String? // e.g. "6 weeks", "40 hours"
+  image            String?
+  isFeatured       Boolean  @default(false)
+  isPublished      Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  deletedAt        DateTime?
 
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
+
+  // Key Curriculum — ordered list of {heading, description}.
+  curriculum CurriculumItem[]
+
+  // Upcoming batches for THIS course (start date + duration).
+  batches CourseBatch[]
 
   // FAQs attached to this course (shown on the course detail page).
   faqs Faq[] @relation("CourseFaqs")
@@ -115,6 +120,36 @@ model Course {
   @@index([createdAt])
   @@index([deletedAt])
   @@map("courses")
+}
+
+// Key Curriculum item — heading + description, ordered, attached to a course.
+model CurriculumItem {
+  id          String @id @default(cuid())
+  courseId    String
+  course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  heading     String
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([courseId])
+  @@map("curriculum_items")
+}
+
+// Upcoming batch / "new batch schedule" for a course.
+model CourseBatch {
+  id        String   @id @default(cuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  startDate DateTime
+  duration  String // e.g. "12 weeks"
+  isOpen    Boolean  @default(true) // enrollment open?
+  showOnHomepage Boolean @default(false) // also list on the home-page batches table
+  createdAt DateTime @default(now())
+
+  @@index([courseId, startDate])
+  @@index([showOnHomepage])
+  @@map("course_batches")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

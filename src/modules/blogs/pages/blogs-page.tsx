@@ -1,6 +1,7 @@
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
 import { DataTableToolbar } from '@/components/data/data-table-toolbar'
@@ -64,10 +65,13 @@ export default function BlogsPage() {
         title="Blogs"
         description="Write and publish blog articles."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New post
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New post
+            </Button>
+          </>
         }
       />
 

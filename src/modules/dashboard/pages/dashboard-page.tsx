@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { EmptyState } from '@/components/common/empty-state'
 import { StatCard } from '../components/stat-card'
 import { ChartCard } from '../components/chart-card'
@@ -16,15 +17,33 @@ import { CourseInterestChart } from '../components/course-interest-chart'
 import { useDashboardAnalytics, useDashboardStats } from '../hooks/use-dashboard'
 
 export default function DashboardPage() {
-  const { data: stats, isLoading: statsLoading } = useDashboardStats()
-  const { data: analytics, isLoading: analyticsLoading } =
-    useDashboardAnalytics()
+  const {
+    data: stats,
+    isLoading: statsLoading,
+    isFetching: statsFetching,
+    refetch: refetchStats,
+  } = useDashboardStats()
+  const {
+    data: analytics,
+    isLoading: analyticsLoading,
+    isFetching: analyticsFetching,
+    refetch: refetchAnalytics,
+  } = useDashboardAnalytics()
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
         description="Overview of leads, content and placements across Techvaa."
+        actions={
+          <RefreshButton
+            onClick={() => {
+              refetchStats()
+              refetchAnalytics()
+            }}
+            loading={statsFetching || analyticsFetching}
+          />
+        }
       />
 
       {/* Stat cards */}

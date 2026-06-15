@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
@@ -67,10 +68,13 @@ export default function CurriculumPage() {
         title="Curriculum"
         description="Manage the key-curriculum items shown on each course page."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New item
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New item
+            </Button>
+          </>
         }
       />
 

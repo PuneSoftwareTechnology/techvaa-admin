@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
 import { DataTableToolbar } from '@/components/data/data-table-toolbar'
@@ -80,10 +81,13 @@ export default function CoursesPage() {
         title="Courses"
         description="Create, publish and manage SAP training courses."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New course
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New course
+            </Button>
+          </>
         }
       />
 

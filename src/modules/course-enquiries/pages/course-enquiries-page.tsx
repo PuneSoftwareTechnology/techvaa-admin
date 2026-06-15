@@ -3,6 +3,7 @@ import { DownloadIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -129,10 +130,13 @@ export default function CourseEnquiriesPage() {
         title="Course Enquiries"
         description='"Enroll Now" enquiries from the upcoming-batches table.'
         actions={
-          <Button variant="outline" onClick={handleExport} disabled={exporting}>
-            <DownloadIcon />
-            Export CSV
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button variant="outline" onClick={handleExport} disabled={exporting}>
+              <DownloadIcon />
+              Export CSV
+            </Button>
+          </>
         }
       />
 

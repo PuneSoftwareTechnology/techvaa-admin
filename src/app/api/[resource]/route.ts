@@ -18,6 +18,7 @@ import {
   seoNestedWrite,
   shape,
 } from "@/lib/api/resources";
+import { triggerRevalidate } from "@/lib/api/revalidate";
 
 type Ctx = { params: Promise<{ resource: string }> };
 
@@ -85,6 +86,7 @@ export async function POST(req: NextRequest, { params }: Ctx) {
       data,
       include: cfg.include,
     });
+    await triggerRevalidate(resource, created);
     return json(shape(cfg, created), req, 201);
   } catch (err) {
     return errorJson(prismaMessage(err, cfg.label), prismaStatus(err), req);

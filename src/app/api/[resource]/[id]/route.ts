@@ -10,6 +10,7 @@ import {
   seoNestedWrite,
   shape,
 } from "@/lib/api/resources";
+import { triggerRevalidate } from "@/lib/api/revalidate";
 import { prismaMessage, prismaStatus } from "../route";
 
 type Ctx = { params: Promise<{ resource: string; id: string }> };
@@ -60,6 +61,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       data,
       include: cfg.include,
     });
+    await triggerRevalidate(resource, updated);
     return json(shape(cfg, updated), req);
   } catch (err) {
     return errorJson(prismaMessage(err, cfg.label), prismaStatus(err), req);
@@ -84,6 +86,7 @@ export async function DELETE(req: NextRequest, { params }: Ctx) {
     } else {
       await delegate(cfg).delete({ where: { id } });
     }
+    await triggerRevalidate(resource);
     return noContent(req);
   } catch (err) {
     return errorJson(prismaMessage(err, cfg.label), prismaStatus(err), req);

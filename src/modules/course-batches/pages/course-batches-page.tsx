@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
@@ -100,10 +101,13 @@ export default function CourseBatchesPage() {
         title="Batch Schedule"
         description="Manage upcoming batches, their schedule, delivery mode and enrolment status."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New batch
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New batch
+            </Button>
+          </>
         }
       />
 

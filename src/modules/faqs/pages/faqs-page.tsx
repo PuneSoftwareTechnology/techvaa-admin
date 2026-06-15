@@ -1,6 +1,7 @@
 import { PlusIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
 import { DataTableToolbar } from '@/components/data/data-table-toolbar'
@@ -75,10 +76,13 @@ export default function FaqsPage() {
         title="FAQs"
         description="Manage frequently asked questions shown on the website."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New FAQ
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New FAQ
+            </Button>
+          </>
         }
       />
 

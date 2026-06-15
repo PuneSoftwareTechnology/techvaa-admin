@@ -1,6 +1,7 @@
 import { PlusIcon, ExternalLinkIcon } from 'lucide-react'
 
 import { PageHeader } from '@/components/common/page-header'
+import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DataTable, type DataTableColumn } from '@/components/data/data-table'
@@ -83,10 +84,13 @@ export default function PlacementsPage() {
         title="Placements"
         description="Showcase student placement success stories."
         actions={
-          <Button onClick={c.openCreate}>
-            <PlusIcon />
-            New placement
-          </Button>
+          <>
+            <RefreshButton onClick={c.refresh} loading={c.isFetching} />
+            <Button onClick={c.openCreate}>
+              <PlusIcon />
+              New placement
+            </Button>
+          </>
         }
       />
 

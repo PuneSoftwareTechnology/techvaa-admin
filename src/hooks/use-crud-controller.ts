@@ -87,6 +87,9 @@ export function useCrudController<T extends Entity, C, U>(
     query,
     rows: query.data?.data,
     meta: query.data?.meta,
+    /** Silently refetch the list; current rows stay on screen while it runs. */
+    refresh: query.refetch,
+    isFetching: query.isFetching,
     // form
     formOpen,
     setFormOpen,

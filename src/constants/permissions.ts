@@ -19,13 +19,13 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
     key: 'leads',
     label: 'Leads',
     description: 'View and manage incoming enquiries.',
-    to: '/leads',
+    to: '/enquiries?type=leads',
   },
   courseEnquiries: {
     key: 'courseEnquiries',
     label: 'Course Enquiries',
     description: 'Triage "Enroll Now" enquiries from the website.',
-    to: '/course-enquiries',
+    to: '/enquiries?type=course-enquiries',
   },
   courses: {
     key: 'courses',

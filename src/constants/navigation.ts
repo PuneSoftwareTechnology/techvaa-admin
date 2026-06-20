@@ -8,7 +8,6 @@ import {
   HelpCircle,
   ListChecks,
   Inbox,
-  ClipboardList,
   ShieldCheck,
   CalendarClock,
   type LucideIcon,
@@ -24,27 +23,21 @@ export interface NavItem {
   group?: string
   /**
    * RBAC permission required to see this item. Items without a permission
-   * (e.g. Dashboard) are visible to every authenticated user.
+   * (e.g. Dashboard) are visible to every authenticated user. A list means the
+   * user needs hold any one of the permissions.
    */
-  permission?: Permission
+  permission?: Permission | Permission[]
 }
 
 /** Primary sidebar navigation. Order drives the rendered menu. */
 export const NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', to: '/', icon: LayoutDashboard, group: 'Overview' },
   {
-    title: 'Leads',
-    to: '/leads',
+    title: 'Enquiries',
+    to: '/enquiries',
     icon: Inbox,
     group: 'Overview',
-    permission: 'leads',
-  },
-  {
-    title: 'Course Enquiries',
-    to: '/course-enquiries',
-    icon: ClipboardList,
-    group: 'Overview',
-    permission: 'courseEnquiries',
+    permission: ['leads', 'courseEnquiries'],
   },
 
   {

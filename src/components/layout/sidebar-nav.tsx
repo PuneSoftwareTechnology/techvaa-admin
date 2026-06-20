@@ -34,9 +34,13 @@ export function SidebarNav({
 }) {
   const user = useAuthStore((s) => s.user)
   // RBAC: only surface routes this user is allowed to reach.
-  const visibleItems = NAV_ITEMS.filter(
-    (item) => !item.permission || hasPermission(user, item.permission),
-  )
+  const visibleItems = NAV_ITEMS.filter((item) => {
+    if (!item.permission) return true
+    const required = Array.isArray(item.permission)
+      ? item.permission
+      : [item.permission]
+    return required.some((p) => hasPermission(user, p))
+  })
   const groups = groupItems(visibleItems)
 
   return (

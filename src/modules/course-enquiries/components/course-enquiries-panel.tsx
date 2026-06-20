@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { DownloadIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { PageHeader } from '@/components/common/page-header'
 import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,9 +26,10 @@ import {
   useUpdateCourseEnquiryStatus,
 } from '../hooks/use-course-enquiries'
 import { courseEnquiryService } from '../services/course-enquiry.service'
-import { CourseEnquiryDetailSheet } from '../components/course-enquiry-detail-sheet'
+import { CourseEnquiryDetailSheet } from './course-enquiry-detail-sheet'
 
-export default function CourseEnquiriesPage() {
+/** Course-enquiry table for the unified Enquiries page. Mounts only when active. */
+export function CourseEnquiriesPanel({ typeFilter }: { typeFilter?: ReactNode }) {
   const c = useCrudController<
     CourseEnquiry,
     Partial<CourseEnquiry>,
@@ -126,9 +126,33 @@ export default function CourseEnquiriesPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        title="Course Enquiries"
-        description='"Enroll Now" enquiries from the upcoming-batches table.'
+      <DataTableToolbar
+        search={c.table.search}
+        onSearchChange={c.table.setSearch}
+        searchPlaceholder="Search name, phone, course…"
+        filters={
+          <>
+            {typeFilter}
+            <Select
+              value={(c.table.filters.status as string) ?? 'all'}
+              onValueChange={(v) =>
+                c.table.setFilter('status', v === 'all' ? undefined : v)
+              }
+            >
+              <SelectTrigger size="sm" className="w-36">
+                <SelectValue placeholder="All statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All statuses</SelectItem>
+                {LEAD_STATUSES.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {humanizeEnum(s)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </>
+        }
         actions={
           <>
             <RefreshButton onClick={c.refresh} loading={c.isFetching} />
@@ -137,32 +161,6 @@ export default function CourseEnquiriesPage() {
               Export CSV
             </Button>
           </>
-        }
-      />
-
-      <DataTableToolbar
-        search={c.table.search}
-        onSearchChange={c.table.setSearch}
-        searchPlaceholder="Search name, phone, course…"
-        filters={
-          <Select
-            value={(c.table.filters.status as string) ?? 'all'}
-            onValueChange={(v) =>
-              c.table.setFilter('status', v === 'all' ? undefined : v)
-            }
-          >
-            <SelectTrigger size="sm" className="w-36">
-              <SelectValue placeholder="All statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              {LEAD_STATUSES.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {humanizeEnum(s)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         }
       />
 

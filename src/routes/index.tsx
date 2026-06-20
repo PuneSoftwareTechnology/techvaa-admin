@@ -28,9 +28,8 @@ const PlacementsPage = lazy(
   () => import('@/modules/placements/pages/placements-page'),
 )
 const FaqsPage = lazy(() => import('@/modules/faqs/pages/faqs-page'))
-const LeadsPage = lazy(() => import('@/modules/leads/pages/leads-page'))
-const CourseEnquiriesPage = lazy(
-  () => import('@/modules/course-enquiries/pages/course-enquiries-page'),
+const EnquiriesPage = lazy(
+  () => import('@/modules/enquiries/pages/enquiries-page'),
 )
 const CredentialsPage = lazy(
   () => import('@/modules/access/pages/credentials-page'),
@@ -125,19 +124,22 @@ export function AppRoutes() {
               }
             />
             <Route
-              path="leads"
+              path="enquiries"
               element={
-                <RequirePermission permission="leads">
-                  <LeadsPage />
+                <RequirePermission permission={['leads', 'courseEnquiries']}>
+                  <EnquiriesPage />
                 </RequirePermission>
               }
+            />
+            {/* Legacy paths — keep old bookmarks working. */}
+            <Route
+              path="leads"
+              element={<Navigate to="/enquiries?type=leads" replace />}
             />
             <Route
               path="course-enquiries"
               element={
-                <RequirePermission permission="courseEnquiries">
-                  <CourseEnquiriesPage />
-                </RequirePermission>
+                <Navigate to="/enquiries?type=course-enquiries" replace />
               }
             />
             <Route

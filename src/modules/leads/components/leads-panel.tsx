@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { DownloadIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { PageHeader } from '@/components/common/page-header'
 import { RefreshButton } from '@/components/common/refresh-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,9 +23,10 @@ import { useCrudController } from '@/hooks/use-crud-controller'
 import { LEAD_STATUSES, type Lead, type LeadStatus } from '@/types/domain'
 import { leadHooks, useUpdateLeadStatus } from '../hooks/use-leads'
 import { leadService } from '../services/lead.service'
-import { LeadDetailSheet } from '../components/lead-detail-sheet'
+import { LeadDetailSheet } from './lead-detail-sheet'
 
-export default function LeadsPage() {
+/** Leads table for the unified Enquiries page. Mounts only when its tab is active. */
+export function LeadsPanel({ typeFilter }: { typeFilter?: ReactNode }) {
   const c = useCrudController<Lead, Partial<Lead>, Partial<Lead>>(leadHooks, {
     sortBy: 'createdAt',
     sortOrder: 'desc',
@@ -112,9 +112,33 @@ export default function LeadsPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        title="Leads"
-        description="Track and qualify incoming enquiries."
+      <DataTableToolbar
+        search={c.table.search}
+        onSearchChange={c.table.setSearch}
+        searchPlaceholder="Search name, email, phone…"
+        filters={
+          <>
+            {typeFilter}
+            <Select
+              value={(c.table.filters.status as string) ?? 'all'}
+              onValueChange={(v) =>
+                c.table.setFilter('status', v === 'all' ? undefined : v)
+              }
+            >
+              <SelectTrigger size="sm" className="w-36">
+                <SelectValue placeholder="All statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All statuses</SelectItem>
+                {LEAD_STATUSES.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {humanizeEnum(s)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </>
+        }
         actions={
           <>
             <RefreshButton onClick={c.refresh} loading={c.isFetching} />
@@ -123,30 +147,6 @@ export default function LeadsPage() {
               Export CSV
             </Button>
           </>
-        }
-      />
-
-      <DataTableToolbar
-        search={c.table.search}
-        onSearchChange={c.table.setSearch}
-        searchPlaceholder="Search name, email, phone…"
-        filters={
-          <Select
-            value={(c.table.filters.status as string) ?? 'all'}
-            onValueChange={(v) => c.table.setFilter('status', v === 'all' ? undefined : v)}
-          >
-            <SelectTrigger size="sm" className="w-36">
-              <SelectValue placeholder="All statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              {LEAD_STATUSES.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {humanizeEnum(s)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         }
       />
 

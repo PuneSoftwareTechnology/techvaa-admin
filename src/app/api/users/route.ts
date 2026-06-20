@@ -14,7 +14,7 @@ import {
 import { getUserFromRequest, toAuthUser } from "@/lib/api/auth";
 
 const SORTABLE = ["createdAt", "name", "email", "role"] as const;
-const ROLES = ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER", "SEO_MANAGER"];
+const ROLES = ["SUPER_ADMIN", "ADMIN", "MARKETING_EXECUTIVE"];
 
 /** Only the full-access role (SUPER_ADMIN) may manage credentials. */
 function canManage(role: string): boolean {
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
   const name = body.name?.trim();
   const email = body.email?.trim().toLowerCase();
   const password = body.password;
-  const role = body.role && ROLES.includes(body.role) ? body.role : "CONTENT_MANAGER";
+  const role = body.role && ROLES.includes(body.role) ? body.role : "MARKETING_EXECUTIVE";
 
   if (!name || !email || !password) {
     return errorJson("Name, email and password are required.", 400, req);

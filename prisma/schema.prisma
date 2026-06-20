@@ -32,8 +32,7 @@ datasource db {
 enum UserRole {
   SUPER_ADMIN
   ADMIN
-  CONTENT_MANAGER
-  SEO_MANAGER
+  MARKETING_EXECUTIVE
 }
 
 enum LeadStatus {
@@ -68,7 +67,7 @@ model User {
   name        String
   email       String    @unique
   password    String // bcrypt hash — never store plaintext
-  role        UserRole  @default(CONTENT_MANAGER)
+  role        UserRole  @default(MARKETING_EXECUTIVE)
   isActive    Boolean   @default(true)
   lastLoginAt DateTime?
   createdAt   DateTime  @default(now())
@@ -96,6 +95,9 @@ model Course {
   description      String // long-form (HTML / markdown)
   duration         String? // e.g. "6 weeks", "40 hours"
   image            String?
+  // About the Trainer — heading + long-form (HTML) shown after the curriculum.
+  trainerHeading     String?
+  trainerDescription String?
   isFeatured       Boolean  @default(false)
   isPublished      Boolean  @default(false)
   createdAt        DateTime @default(now())

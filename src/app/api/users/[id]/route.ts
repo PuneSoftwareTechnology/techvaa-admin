@@ -6,7 +6,7 @@ import { errorJson, json, noContent, preflight } from "@/lib/api/rest";
 import { getUserFromRequest, toAuthUser } from "@/lib/api/auth";
 
 type Ctx = { params: Promise<{ id: string }> };
-const ROLES = ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER", "SEO_MANAGER"];
+const ROLES = ["SUPER_ADMIN", "ADMIN", "MARKETING_EXECUTIVE"];
 
 function canManage(role: string): boolean {
   return role === "SUPER_ADMIN";

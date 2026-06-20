@@ -105,6 +105,33 @@ export function CourseForm({
             />
           </Field>
         </Section>
+
+        <Section title="About the Trainer" accent="rose">
+          <Field
+            label="Heading"
+            htmlFor="trainerHeading"
+            hint="Shown after the curriculum, e.g. the trainer's name or title."
+            error={errors.trainerHeading?.message}
+          >
+            <Input id="trainerHeading" {...register('trainerHeading')} />
+          </Field>
+
+          <Field
+            label="Description"
+            htmlFor="trainerDescription"
+            error={errors.trainerDescription?.message}
+          >
+            <RichTextEditor
+              id="trainerDescription"
+              value={watch('trainerDescription')}
+              onChange={(html) =>
+                setValue('trainerDescription', html, { shouldDirty: true, shouldValidate: true })
+              }
+              invalid={!!errors.trainerDescription}
+              placeholder="Describe the trainer…"
+            />
+          </Field>
+        </Section>
       </div>
 
       {/* Column 2 — settings */}
@@ -220,6 +247,10 @@ const ACCENTS = {
   violet: {
     card: 'border-violet-200 bg-violet-50/60 dark:border-violet-900/60 dark:bg-violet-950/20',
     head: 'border-violet-200 bg-violet-100/70 text-violet-900 dark:border-violet-900/60 dark:bg-violet-900/30 dark:text-violet-200',
+  },
+  rose: {
+    card: 'border-rose-200 bg-rose-50/60 dark:border-rose-900/60 dark:bg-rose-950/20',
+    head: 'border-rose-200 bg-rose-100/70 text-rose-900 dark:border-rose-900/60 dark:bg-rose-900/30 dark:text-rose-200',
   },
 } as const
 

@@ -139,6 +139,8 @@ export default function CoursesPage() {
                   shortDescription: c.editing.shortDescription ?? '',
                   description: c.editing.description,
                   duration: c.editing.duration ?? '',
+                  trainerHeading: c.editing.trainerHeading ?? '',
+                  trainerDescription: c.editing.trainerDescription ?? '',
                   relatedCourseIds: c.editing.relatedCourseIds ?? [],
                   image: c.editing.image ?? '',
                   isFeatured: c.editing.isFeatured,

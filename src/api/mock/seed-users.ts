@@ -32,13 +32,13 @@ export const SEED_USERS: MockUser[] = [
     updatedAt: nowIso(),
   },
   {
-    id: 'usr_content',
+    id: 'usr_marketing',
     name: 'Priya Nair',
-    email: 'content@techvaa.com',
-    password: 'content123',
-    role: 'CONTENT_MANAGER',
-    // Role-derived access: a content manager handles site content modules.
-    permissions: ['courses', 'blogs', 'faqs', 'reviews', 'testimonials', 'placements'],
+    email: 'marketing@techvaa.com',
+    password: 'marketing123',
+    role: 'MARKETING_EXECUTIVE',
+    // Role-derived access: a marketing executive only manages the blog.
+    permissions: ['blogs'],
     isActive: true,
     lastLoginAt: null,
     createdAt: nowIso(),

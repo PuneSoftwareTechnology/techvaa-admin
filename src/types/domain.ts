@@ -7,7 +7,7 @@
 export type ISODateString = string
 
 // ── Enums ────────────────────────────────────────────────────────────────
-export const USER_ROLES = ['SUPER_ADMIN', 'ADMIN', 'CONTENT_MANAGER', 'SEO_MANAGER'] as const
+export const USER_ROLES = ['SUPER_ADMIN', 'ADMIN', 'MARKETING_EXECUTIVE'] as const
 export type UserRole = (typeof USER_ROLES)[number]
 
 /**
@@ -92,6 +92,10 @@ export interface Course extends Timestamps {
   /** Human-readable length, e.g. "6 weeks", "40 hours". */
   duration?: string | null
   image?: string | null
+  /** "About the Trainer" heading, shown after the curriculum. */
+  trainerHeading?: string | null
+  /** "About the Trainer" description (HTML), shown after the curriculum. */
+  trainerDescription?: string | null
   isFeatured: boolean
   isPublished: boolean
   /** Curated related courses (included on reads). */

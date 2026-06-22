@@ -272,9 +272,20 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       "image",
       "videoUrl",
       "isPublished",
+      "showOnHomepage",
     ],
     nullableBlanks: ["role", "company", "image", "videoUrl"],
-    filters: { isPublished: { kind: "boolean" } },
+    include: { courses: { select: { id: true, title: true, slug: true } } },
+    relations: { courses: "courseIds" },
+    // Expose the attached course ids as a flat array for the form's multi-select.
+    transform: (row) => {
+      const courses = (row.courses as { id: string }[] | undefined) ?? [];
+      return { ...row, courseIds: courses.map((c) => c.id) };
+    },
+    filters: {
+      isPublished: { kind: "boolean" },
+      showOnHomepage: { kind: "boolean" },
+    },
   },
 
   placements: {

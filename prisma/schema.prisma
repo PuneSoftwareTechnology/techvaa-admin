@@ -116,6 +116,9 @@ model Course {
   // FAQs attached to this course (shown on the course detail page).
   faqs Faq[] @relation("CourseFaqs")
 
+  // Testimonials attached to this course (shown on the course detail page).
+  testimonials Testimonial[] @relation("CourseTestimonials")
+
   // Blogs that curate this course as related (Blog.relatedCourses, M2M).
   relatedBlogs Blog[] @relation("BlogRelatedCourses")
 
@@ -243,11 +246,18 @@ model Testimonial {
   image       String?
   videoUrl    String?
   isPublished Boolean   @default(false)
+  // When true, the testimonial appears in the homepage success-stories section.
+  showOnHomepage Boolean @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
+  // Courses this testimonial is attached to. It shows on a course page only
+  // when that course is in this set; homepage placement uses showOnHomepage.
+  courses Course[] @relation("CourseTestimonials")
+
   @@index([isPublished])
+  @@index([showOnHomepage])
   @@index([deletedAt])
   @@map("testimonials")
 }

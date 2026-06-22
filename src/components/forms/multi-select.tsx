@@ -20,6 +20,8 @@ interface MultiSelectProps {
   emptyText?: string
   /** Show a search box inside the dropdown (default: on when >8 options). */
   searchable?: boolean
+  /** Cap the option list height and scroll inside it (default: true). */
+  scrollable?: boolean
 }
 
 /**
@@ -34,6 +36,7 @@ export function MultiSelect({
   placeholder = 'Select…',
   emptyText = 'No options available.',
   searchable,
+  scrollable = true,
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -105,26 +108,36 @@ export function MultiSelect({
           </div>
         )}
 
-        <div className="max-h-60 overflow-y-auto p-1">
+        <div
+          className={cn('p-1', scrollable && 'max-h-60 overflow-y-auto')}
+        >
           {filtered.length === 0 ? (
             <p className="px-2 py-3 text-center text-sm text-muted-foreground">
               {emptyText}
             </p>
           ) : (
-            filtered.map((o) => (
-              <button
-                key={o.value}
-                type="button"
-                onClick={() => toggle(o.value)}
-                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-muted"
-              >
-                <Checkbox
-                  checked={value.includes(o.value)}
-                  className="pointer-events-none"
-                />
-                <span className="truncate">{o.label}</span>
-              </button>
-            ))
+            filtered.map((o) => {
+              const isSelected = value.includes(o.value)
+              return (
+                <button
+                  key={o.value}
+                  type="button"
+                  onClick={() => toggle(o.value)}
+                  className={cn(
+                    'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors',
+                    isSelected
+                      ? 'bg-primary/10 font-medium text-primary hover:bg-primary/15'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <Checkbox
+                    checked={isSelected}
+                    className="pointer-events-none"
+                  />
+                  <span className="truncate">{o.label}</span>
+                </button>
+              )
+            })
           )}
         </div>
       </PopoverContent>

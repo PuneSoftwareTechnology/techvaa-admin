@@ -10,6 +10,7 @@ import { RowActions } from '@/components/data/row-actions'
 import { FormDialog } from '@/components/data/form-dialog'
 import { ConfirmDialog } from '@/components/data/confirm-dialog'
 import { PublishBadge } from '@/components/common/badges'
+import { Badge } from '@/components/ui/badge'
 import { useCrudController } from '@/hooks/use-crud-controller'
 import type { Testimonial } from '@/types/domain'
 import { testimonialHooks } from '../hooks/use-testimonials'
@@ -63,6 +64,25 @@ export default function TestimonialsPage() {
         ) : (
           <span className="text-muted-foreground">—</span>
         ),
+    },
+    {
+      id: 'placement',
+      header: 'Shown on',
+      cell: (t) => (
+        <div className="flex flex-wrap gap-1">
+          {t.showOnHomepage && <Badge variant="secondary">Homepage</Badge>}
+          {(t.courses?.length ?? 0) > 0 && (
+            <Badge variant="outline">
+              {t.courses!.length === 1
+                ? t.courses![0].title
+                : `${t.courses!.length} courses`}
+            </Badge>
+          )}
+          {!t.showOnHomepage && (t.courses?.length ?? 0) === 0 && (
+            <span className="text-xs text-muted-foreground">—</span>
+          )}
+        </div>
+      ),
     },
     {
       id: 'status',
@@ -133,6 +153,11 @@ export default function TestimonialsPage() {
                   image: c.editing.image ?? '',
                   videoUrl: c.editing.videoUrl ?? '',
                   isPublished: c.editing.isPublished,
+                  showOnHomepage: c.editing.showOnHomepage,
+                  courseIds:
+                    c.editing.courseIds ??
+                    c.editing.courses?.map((course) => course.id) ??
+                    [],
                 }
               : undefined
           }

@@ -75,9 +75,9 @@ export const REVIEW_SEED: Review[] = [
 ]
 
 export const TESTIMONIAL_SEED: Testimonial[] = [
-  { id: 'tst_1', name: 'Ananya Sharma', role: 'SAP FICO Consultant', company: 'Accenture', message: 'Techvaa transformed my career. The hands-on S/4HANA labs made all the difference in my interviews.', image: null, videoUrl: null, isPublished: true, createdAt: daysAgo(40), updatedAt: daysAgo(40) },
-  { id: 'tst_2', name: 'Rahul Verma', role: 'SAP ABAP Developer', company: 'Infosys', message: 'The trainers are real-world consultants who teach what the industry actually needs. Best decision I made.', image: null, videoUrl: 'https://youtu.be/dQw4w9WgXcQ', isPublished: true, createdAt: daysAgo(35), updatedAt: daysAgo(35) },
-  { id: 'tst_3', name: 'Karan Mehta', role: 'SAP FICO Consultant', company: 'Deloitte', message: 'From training to a signed offer in under three months. The placement team genuinely had my back.', image: null, videoUrl: null, isPublished: false, createdAt: daysAgo(10), updatedAt: daysAgo(10) },
+  { id: 'tst_1', name: 'Ananya Sharma', role: 'SAP FICO Consultant', company: 'Accenture', message: 'Techvaa transformed my career. The hands-on S/4HANA labs made all the difference in my interviews.', image: null, videoUrl: null, isPublished: true, showOnHomepage: true, courseIds: [], createdAt: daysAgo(40), updatedAt: daysAgo(40) },
+  { id: 'tst_2', name: 'Rahul Verma', role: 'SAP ABAP Developer', company: 'Infosys', message: 'The trainers are real-world consultants who teach what the industry actually needs. Best decision I made.', image: null, videoUrl: 'https://youtu.be/dQw4w9WgXcQ', isPublished: true, showOnHomepage: true, courseIds: [], createdAt: daysAgo(35), updatedAt: daysAgo(35) },
+  { id: 'tst_3', name: 'Karan Mehta', role: 'SAP FICO Consultant', company: 'Deloitte', message: 'From training to a signed offer in under three months. The placement team genuinely had my back.', image: null, videoUrl: null, isPublished: false, showOnHomepage: false, courseIds: [], createdAt: daysAgo(10), updatedAt: daysAgo(10) },
 ]
 
 export const PLACEMENT_SEED: Placement[] = [

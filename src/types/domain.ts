@@ -191,6 +191,9 @@ export interface Testimonial extends Timestamps {
   image?: string | null
   videoUrl?: string | null
   isPublished: boolean
+  showOnHomepage: boolean
+  courseIds?: string[]
+  courses?: Pick<Course, 'id' | 'title' | 'slug'>[]
 }
 
 export interface Placement extends Timestamps {

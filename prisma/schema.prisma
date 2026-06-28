@@ -178,11 +178,13 @@ model Blog {
 
   // Primary content block
   primaryTitle String?
+  primaryImage String? // optional photo shown between the title and intro
   primaryIntro String?
   primaryText  String?
 
   // Secondary content block
   secondaryTitle String?
+  secondaryImage String? // optional photo shown between the title and intro
   secondaryIntro String?
   secondaryText  String?
 

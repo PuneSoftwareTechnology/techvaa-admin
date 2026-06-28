@@ -149,10 +149,12 @@ export interface Blog extends Timestamps {
   introduction: string
 
   primaryTitle?: string | null
+  primaryImage?: string | null
   primaryIntro?: string | null
   primaryText?: string | null
 
   secondaryTitle?: string | null
+  secondaryImage?: string | null
   secondaryIntro?: string | null
   secondaryText?: string | null
 

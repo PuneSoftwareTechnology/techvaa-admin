@@ -124,6 +124,20 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
             <Input {...register(`${key}Title`)} />
           </Field>
 
+          {/* Optional photo, between title and intro — primary & secondary only */}
+          {key !== 'tertiary' && (
+            <Field label="Photo" error={errors[`${key}Image`]?.message}>
+              <ImageUpload
+                value={watch(`${key}Image`)}
+                folder="blogs"
+                slug={slug ? `${slug}-${key}` : key}
+                onChange={(url) =>
+                  setValue(`${key}Image`, url, { shouldDirty: true, shouldValidate: true })
+                }
+              />
+            </Field>
+          )}
+
           <Field label="Intro" error={errors[`${key}Intro`]?.message}>
             <Textarea rows={2} {...register(`${key}Intro`)} />
           </Field>

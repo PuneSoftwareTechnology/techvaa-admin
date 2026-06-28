@@ -17,11 +17,13 @@ export const blogSchema = z.object({
 
   // Primary content block
   primaryTitle: optionalText,
+  primaryImage: optionalImage,
   primaryIntro: optionalText,
   primaryText: optionalText,
 
   // Secondary content block
   secondaryTitle: optionalText,
+  secondaryImage: optionalImage,
   secondaryIntro: optionalText,
   secondaryText: optionalText,
 
@@ -47,9 +49,11 @@ export const BLOG_DEFAULTS: BlogFormValues = {
   featuredImage: '',
   introduction: '',
   primaryTitle: '',
+  primaryImage: '',
   primaryIntro: '',
   primaryText: '',
   secondaryTitle: '',
+  secondaryImage: '',
   secondaryIntro: '',
   secondaryText: '',
   tertiaryTitle: '',

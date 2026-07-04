@@ -20,7 +20,7 @@ frontend:
         # they ship inside the deployment bundle and process.env can read them
         # at runtime. (NEXT_PUBLIC_* are inlined at build, so they're not needed
         # here.)
-        - env | grep -E '^(DATABASE|AUTH_SECRET|REGION|S3_BUCKET)=' >> .env.production || true
+        - env | grep -E '^(DATABASE|AUTH_SECRET|REGION|S3_BUCKET|S3_PUBLIC_URL|ACCESS_KEY|SECRET_KEY)=' >> .env.production || true
         - npm run build
   artifacts:
     # Next.js SSR output. Amplify detects the SSR (WEB_COMPUTE) build and

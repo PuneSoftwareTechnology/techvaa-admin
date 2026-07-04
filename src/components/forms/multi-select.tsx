@@ -119,12 +119,22 @@ export function MultiSelect({
             filtered.map((o) => {
               const isSelected = value.includes(o.value)
               return (
-                <button
+                // A div (not a button) so the Radix Checkbox — itself a <button> —
+                // isn't illegally nested inside another button.
+                <div
                   key={o.value}
-                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  tabIndex={0}
                   onClick={() => toggle(o.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      toggle(o.value)
+                    }
+                  }}
                   className={cn(
-                    'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors',
+                    'flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
                     isSelected
                       ? 'bg-primary/10 font-medium text-primary hover:bg-primary/15'
                       : 'hover:bg-muted',
@@ -135,7 +145,7 @@ export function MultiSelect({
                     className="pointer-events-none"
                   />
                   <span className="truncate">{o.label}</span>
-                </button>
+                </div>
               )
             })
           )}

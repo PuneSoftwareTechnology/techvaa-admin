@@ -206,6 +206,14 @@ model Blog {
   // Curated related courses (M2M). Implicit join table _BlogRelatedCourses.
   relatedCourses Course[] @relation("BlogRelatedCourses")
 
+  // Curated "related" blogs surfaced on the detail page, stored as an ordered
+  // id array (mirrors the public site schema). The DB column is NOT NULL with
+  // no default, so the client must always send a value on insert — hence
+  // `@default([])`. The admin previously omitted this field entirely, which
+  // made every blog *create* fail with a P2011 null-constraint violation
+  // (updates were unaffected, since they don't touch the column).
+  relatedBlogIds String[] @default([])
+
   // Optional one-to-one SEO metadata (FK lives on SeoMetadata).
   seo SeoMetadata?
 

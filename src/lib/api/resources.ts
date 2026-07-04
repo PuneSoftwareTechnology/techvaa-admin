@@ -173,7 +173,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
   blogs: {
     model: "blog",
     label: "Blog",
-    searchable: ["title", "slug", "excerpt"],
+    searchable: ["title", "slug", "metaDescription"],
     sortable: ["createdAt", "title", "publishedAt", "isPublished"],
     defaultSort: "createdAt",
     softDelete: true,

@@ -58,3 +58,9 @@ next-env.d.ts
 
 # Claude
 .claude/settings.local.json
+
+# Stray files from mistyped shell redirects (e.g. "git push" typos)
+/h origin*
+/h the fix*
+/aws-*.json
+/amplify-app*.json

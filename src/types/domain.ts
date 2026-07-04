@@ -159,6 +159,7 @@ export interface Blog extends Timestamps {
   secondaryText?: string | null
 
   tertiaryTitle?: string | null
+  tertiaryImage?: string | null
   tertiaryIntro?: string | null
   tertiaryText?: string | null
   tertiaryPoints: string[]

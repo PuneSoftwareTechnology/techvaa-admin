@@ -117,7 +117,7 @@ export function RichTextEditor({
       />
 
       {preview ? (
-        <div className="flex-1 overflow-auto">
+        <div className="max-h-96 flex-1 overflow-y-auto">
           <div
             className="prose prose-sm max-w-none px-3 py-2"
             // Preview only — the website sanitises before render.
@@ -125,7 +125,7 @@ export function RichTextEditor({
           />
         </div>
       ) : (
-        <div className="flex-1 overflow-auto">
+        <div className="max-h-96 flex-1 overflow-y-auto">
           <EditorContent editor={editor} id={id} />
         </div>
       )}

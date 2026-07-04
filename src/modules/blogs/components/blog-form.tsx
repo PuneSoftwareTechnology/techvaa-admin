@@ -15,6 +15,7 @@ import { courseHooks } from '@/modules/courses/hooks/use-courses'
 import { CourseSection as Section } from '@/modules/courses/components/course-form'
 import { ImageUpload } from '@/components/forms/image-upload'
 import { RichTextEditor } from '@/components/forms/rich-text-editor'
+import { EntitySeoSection } from '@/modules/seo/components/entity-seo-section'
 import {
   blogSchema,
   BLOG_DEFAULTS,
@@ -124,19 +125,17 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
             <Input {...register(`${key}Title`)} />
           </Field>
 
-          {/* Optional photo, between title and intro — primary & secondary only */}
-          {key !== 'tertiary' && (
-            <Field label="Photo" error={errors[`${key}Image`]?.message}>
-              <ImageUpload
-                value={watch(`${key}Image`)}
-                folder="blogs"
-                slug={slug ? `${slug}-${key}` : key}
-                onChange={(url) =>
-                  setValue(`${key}Image`, url, { shouldDirty: true, shouldValidate: true })
-                }
-              />
-            </Field>
-          )}
+          {/* Optional photo, between title and intro. */}
+          <Field label="Photo" error={errors[`${key}Image`]?.message}>
+            <ImageUpload
+              value={watch(`${key}Image`)}
+              folder="blogs"
+              slug={slug ? `${slug}-${key}` : key}
+              onChange={(url) =>
+                setValue(`${key}Image`, url, { shouldDirty: true, shouldValidate: true })
+              }
+            />
+          </Field>
 
           <Field label="Intro" error={errors[`${key}Intro`]?.message}>
             <Textarea rows={2} {...register(`${key}Intro`)} />
@@ -245,6 +244,19 @@ export function BlogForm({ formId, defaultValues, onSubmit }: BlogFormProps) {
           </div>
         </Section>
       </div>
+      </div>
+
+      {/* Full-width row — SEO / keywords */}
+      <div className="lg:col-span-4">
+        <Section title="SEO / Keywords" accent="violet">
+          <EntitySeoSection
+            register={register}
+            errors={errors}
+            robots={watch('seo.robots') ?? 'INDEX_FOLLOW'}
+            onRobotsChange={(v) => setValue('seo.robots', v)}
+            hideMetaDescription
+          />
+        </Section>
       </div>
     </form>
   )

@@ -190,6 +190,7 @@ model Blog {
 
   // Tertiary content block (the only block with bullet points)
   tertiaryTitle  String?
+  tertiaryImage  String? // optional photo shown between the title and intro
   tertiaryIntro  String?
   tertiaryText   String?
   tertiaryPoints String[] // "Add bullet point" list

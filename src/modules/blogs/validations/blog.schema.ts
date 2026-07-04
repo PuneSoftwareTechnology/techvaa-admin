@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
 import { requiredRichText } from '@/lib/rich-text'
+import {
+  entitySeoSchema,
+  ENTITY_SEO_DEFAULTS,
+} from '@/modules/seo/validations/entity-seo.schema'
 
 const optionalText = z.string().optional().or(z.literal(''))
 const optionalImage = z.string().url('Enter a valid URL').optional().or(z.literal(''))
@@ -29,6 +33,7 @@ export const blogSchema = z.object({
 
   // Tertiary content block
   tertiaryTitle: optionalText,
+  tertiaryImage: optionalImage,
   tertiaryIntro: optionalText,
   tertiaryText: optionalText,
   tertiaryPoints: z.array(z.string().min(1)),
@@ -38,6 +43,7 @@ export const blogSchema = z.object({
   relatedCourseIds: z.array(z.string()),
   showOnHomepage: z.boolean(),
   isPublished: z.boolean(),
+  seo: entitySeoSchema.optional(),
 })
 
 export type BlogFormValues = z.infer<typeof blogSchema>
@@ -57,6 +63,7 @@ export const BLOG_DEFAULTS: BlogFormValues = {
   secondaryIntro: '',
   secondaryText: '',
   tertiaryTitle: '',
+  tertiaryImage: '',
   tertiaryIntro: '',
   tertiaryText: '',
   tertiaryPoints: [],
@@ -64,4 +71,5 @@ export const BLOG_DEFAULTS: BlogFormValues = {
   relatedCourseIds: [],
   showOnHomepage: false,
   isPublished: false,
+  seo: ENTITY_SEO_DEFAULTS,
 }

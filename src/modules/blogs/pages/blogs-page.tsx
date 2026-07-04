@@ -13,6 +13,7 @@ import { PublishBadge } from '@/components/common/badges'
 import { formatDate } from '@/lib/format'
 import { useCrudController } from '@/hooks/use-crud-controller'
 import type { Blog } from '@/types/domain'
+import { seoToFormValues } from '@/modules/seo/validations/entity-seo.schema'
 import { blogHooks } from '../hooks/use-blogs'
 import { BlogForm } from '../components/blog-form'
 import { BLOG_DEFAULTS } from '../validations/blog.schema'
@@ -129,6 +130,7 @@ export default function BlogsPage() {
                   secondaryIntro: c.editing.secondaryIntro ?? '',
                   secondaryText: c.editing.secondaryText ?? '',
                   tertiaryTitle: c.editing.tertiaryTitle ?? '',
+                  tertiaryImage: c.editing.tertiaryImage ?? '',
                   tertiaryIntro: c.editing.tertiaryIntro ?? '',
                   tertiaryText: c.editing.tertiaryText ?? '',
                   tertiaryPoints: c.editing.tertiaryPoints ?? [],
@@ -139,6 +141,7 @@ export default function BlogsPage() {
                     [],
                   showOnHomepage: c.editing.showOnHomepage,
                   isPublished: c.editing.isPublished,
+                  seo: seoToFormValues(c.editing.seo),
                 }
               : undefined
           }

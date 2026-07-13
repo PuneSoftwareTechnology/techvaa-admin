@@ -16,11 +16,23 @@ export function nowIso() {
   return new Date().toISOString()
 }
 
+/** Read a possibly-nested value by dot path, e.g. "course.title". */
+function resolvePath(row: Record<string, unknown>, path: string): unknown {
+  if (!path.includes('.')) return row[path]
+  return path.split('.').reduce<unknown>(
+    (acc, key) =>
+      acc && typeof acc === 'object'
+        ? (acc as Record<string, unknown>)[key]
+        : undefined,
+    row,
+  )
+}
+
 /** Apply search / sort / pagination to an in-memory array, mimicking the API. */
 export function applyListParams<T extends Record<string, unknown>>(
   rows: T[],
   params: ListParams | undefined,
-  searchFields: (keyof T)[],
+  searchFields: string[],
 ): Paginated<T> {
   const {
     page = 1,
@@ -37,7 +49,7 @@ export function applyListParams<T extends Record<string, unknown>>(
     const q = search.trim().toLowerCase()
     result = result.filter((row) =>
       searchFields.some((field) =>
-        String(row[field] ?? '')
+        String(resolvePath(row, field) ?? '')
           .toLowerCase()
           .includes(q),
       ),

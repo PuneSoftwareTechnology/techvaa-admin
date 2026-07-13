@@ -145,7 +145,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
   "course-batches": {
     model: "courseBatch",
     label: "Batch",
-    searchable: ["duration"],
+    searchable: ["course.title", "duration", "timing", "mode"],
     sortable: ["startDate", "createdAt"],
     defaultSort: "startDate",
     softDelete: false,
@@ -407,9 +407,18 @@ export function buildWhere(
 
   const search = sp.get("search")?.trim();
   if (search) {
-    where.OR = cfg.searchable.map((f) => ({
-      [f]: { contains: search, mode: "insensitive" },
-    }));
+    const contains = { contains: search, mode: "insensitive" };
+    // A searchable field may be a relation path ("course.title"), which nests
+    // into a Prisma relation filter: { course: { title: { contains } } }.
+    where.OR = cfg.searchable.map((f) =>
+      f
+        .split(".")
+        .reverse()
+        .reduce<Record<string, unknown>>(
+          (acc, key) => ({ [key]: acc }),
+          contains
+        )
+    );
   }
 
   for (const [param, filter] of Object.entries(cfg.filters ?? {})) {

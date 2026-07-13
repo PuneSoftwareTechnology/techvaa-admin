@@ -29,6 +29,21 @@ import {
  * The in-memory mock database. A single shared instance per resource, seeded
  * once on first import. Mutations persist for the lifetime of the tab.
  */
+/**
+ * Attach each batch's parent course (id/title/slug), mirroring the API's
+ * `include: { course }`. Lets the list resolve titles and search by course
+ * name without a second lookup.
+ */
+const courseById = new Map(COURSE_SEED.map((c) => [c.id, c]))
+const COURSE_BATCH_SEED_WITH_COURSE: CourseBatch[] = COURSE_BATCH_SEED.map(
+  (batch) => {
+    const course = courseById.get(batch.courseId)
+    return course
+      ? { ...batch, course: { id: course.id, title: course.title, slug: course.slug } }
+      : batch
+  },
+)
+
 export const mockDb = {
   courses: new MockCollection<Course>(COURSE_SEED, {
     idPrefix: 'crs',
@@ -38,9 +53,9 @@ export const mockDb = {
     idPrefix: 'cur',
     searchFields: ['heading', 'description'],
   }),
-  courseBatches: new MockCollection<CourseBatch>(COURSE_BATCH_SEED, {
+  courseBatches: new MockCollection<CourseBatch>(COURSE_BATCH_SEED_WITH_COURSE, {
     idPrefix: 'bat',
-    searchFields: ['duration'],
+    searchFields: ['course.title', 'duration', 'timing', 'mode'],
   }),
   blogs: new MockCollection<Blog>(BLOG_SEED, {
     idPrefix: 'blg',

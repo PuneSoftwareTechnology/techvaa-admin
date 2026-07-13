@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { ImageIcon, Loader2Icon, UploadCloudIcon, XIcon } from 'lucide-react'
+import { CopyIcon, ImageIcon, Loader2Icon, UploadCloudIcon, XIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
@@ -42,6 +42,16 @@ export function ImageUpload({ value, folder, slug, onChange }: ImageUploadProps)
       { file, folder, slug: slug || 'misc' },
       { onSuccess: (url) => onChange(url) },
     )
+  }
+
+  async function copyUrl() {
+    if (!value) return
+    try {
+      await navigator.clipboard.writeText(value)
+      toast.success('Image URL copied — paste it into the OG image URL field.')
+    } catch {
+      toast.error('Could not copy the URL.')
+    }
   }
 
   return (
@@ -94,15 +104,27 @@ export function ImageUpload({ value, folder, slug, onChange }: ImageUploadProps)
           {value ? 'Replace' : 'Upload'}
         </Button>
         {value && !upload.isPending && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onChange('')}
-          >
-            <XIcon className="size-4" />
-            Remove
-          </Button>
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={copyUrl}
+              title="Copy the image URL to paste into the OG image URL / SEO field"
+            >
+              <CopyIcon className="size-4" />
+              Copy URL
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => onChange('')}
+            >
+              <XIcon className="size-4" />
+              Remove
+            </Button>
+          </>
         )}
       </div>
 

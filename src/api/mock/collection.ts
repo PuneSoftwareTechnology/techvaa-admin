@@ -10,9 +10,10 @@ import { applyListParams, delay, mockId, nowIso } from './utils'
 export class MockCollection<T extends Entity> {
   private rows: T[]
   private readonly idPrefix: string
-  private readonly searchFields: (keyof T)[]
+  /** Field names to full-text search; dot paths (e.g. "course.title") allowed. */
+  private readonly searchFields: string[]
 
-  constructor(seed: T[], opts: { idPrefix: string; searchFields: (keyof T)[] }) {
+  constructor(seed: T[], opts: { idPrefix: string; searchFields: string[] }) {
     this.rows = [...seed]
     this.idPrefix = opts.idPrefix
     this.searchFields = opts.searchFields
@@ -22,7 +23,7 @@ export class MockCollection<T extends Entity> {
     const result = applyListParams(
       this.rows as unknown as Record<string, unknown>[],
       params,
-      this.searchFields as string[],
+      this.searchFields,
     )
     return delay(result as unknown as Paginated<T>)
   }

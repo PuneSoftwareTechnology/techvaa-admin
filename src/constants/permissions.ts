@@ -100,7 +100,7 @@ export const GRANTABLE_PERMISSIONS: PermissionMeta[] = PERMISSIONS.map(
  */
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   SUPER_ADMIN: [...PERMISSIONS],
-  ADMIN: ['courseEnquiries', 'blogs', 'batchSchedule'],
+  ADMIN: ['leads', 'courseEnquiries', 'blogs', 'batchSchedule'],
   MARKETING_EXECUTIVE: ['blogs'],
 }
 

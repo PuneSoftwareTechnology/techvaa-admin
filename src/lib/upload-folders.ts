@@ -5,7 +5,7 @@
  * Shared by the client upload component and the server route so both agree on
  * which prefixes are allowed — keep this list as the single source of truth.
  */
-export const UPLOAD_FOLDERS = ['courses', 'blogs'] as const
+export const UPLOAD_FOLDERS = ['courses', 'blogs', 'placements', 'testimonials'] as const
 
 export type UploadFolder = (typeof UPLOAD_FOLDERS)[number]
 

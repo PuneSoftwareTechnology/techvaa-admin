@@ -209,6 +209,10 @@ export interface Placement extends Timestamps {
   linkedinUrl?: string | null
   joiningDate?: ISODateString | null
   isPublished: boolean
+  /** Shown in "Recently Placed Students" on the pages of `courseIds`. */
+  showOnCoursePage: boolean
+  courseIds?: string[]
+  courses?: Pick<Course, 'id' | 'title' | 'slug'>[]
 }
 
 export interface Faq extends Timestamps {

@@ -9,6 +9,12 @@ export const placementSchema = z.object({
   linkedinUrl: z.string().url('Enter a valid URL').optional().or(z.literal('')),
   joiningDate: z.string().optional().or(z.literal('')),
   isPublished: z.boolean(),
+  // Show in the "Recently Placed Students" section of the selected course pages.
+  showOnCoursePage: z.boolean(),
+  courseIds: z.array(z.string()),
+}).refine((v) => !v.showOnCoursePage || v.courseIds.length > 0, {
+  path: ['courseIds'],
+  message: 'Pick at least one course page, or turn “Show on course page” off',
 })
 
 export type PlacementFormValues = z.infer<typeof placementSchema>
@@ -22,4 +28,6 @@ export const PLACEMENT_DEFAULTS: PlacementFormValues = {
   linkedinUrl: '',
   joiningDate: '',
   isPublished: false,
+  showOnCoursePage: false,
+  courseIds: [],
 }

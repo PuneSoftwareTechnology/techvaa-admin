@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/forms/multi-select";
+import { ImageUpload } from "@/components/forms/image-upload";
+import { slugify } from "@/lib/format";
 import { courseHooks } from "@/modules/courses/hooks/use-courses";
 import {
   testimonialSchema,
@@ -67,19 +69,26 @@ export function TestimonialForm({
         <Textarea id="message" rows={4} {...register("message")} />
       </Field>
 
-      <Field label="Image URL" htmlFor="image" error={errors.image?.message}>
-        <Input id="image" placeholder="https://…" {...register("image")} />
+      <Field label="Photo" error={errors.image?.message}>
+        <ImageUpload
+          value={watch("image")}
+          folder="testimonials"
+          slug={slugify(watch("name") || "testimonial")}
+          onChange={(url) =>
+            setValue("image", url, { shouldDirty: true, shouldValidate: true })
+          }
+        />
       </Field>
 
       <Field
         label="Video URL"
         htmlFor="videoUrl"
-        hint="Optional — link to a video testimonial."
+        hint="Optional — paste a YouTube or Instagram reel link (open the video → Share → Copy link). The card then shows the video with a play button, with the message underneath."
         error={errors.videoUrl?.message}
       >
         <Input
           id="videoUrl"
-          placeholder="https://…"
+          placeholder="https://youtu.be/… or https://www.instagram.com/reel/…"
           {...register("videoUrl")}
         />
       </Field>

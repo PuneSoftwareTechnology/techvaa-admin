@@ -143,6 +143,8 @@ export default function PlacementsPage() {
                     ? c.editing.joiningDate.slice(0, 10)
                     : '',
                   isPublished: c.editing.isPublished,
+                  showOnCoursePage: c.editing.showOnCoursePage ?? false,
+                  courseIds: c.editing.courseIds ?? [],
                 }
               : undefined
           }

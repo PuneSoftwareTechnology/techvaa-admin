@@ -119,6 +119,10 @@ model Course {
   // Testimonials attached to this course (shown on the course detail page).
   testimonials Testimonial[] @relation("CourseTestimonials")
 
+  // Placements shown in this course page's "Recently Placed Students" section
+  // (only those with showOnCoursePage = true).
+  placements Placement[] @relation("CoursePlacements")
+
   // Blogs that curate this course as related (Blog.relatedCourses, M2M).
   relatedBlogs Blog[] @relation("BlogRelatedCourses")
 
@@ -283,11 +287,18 @@ model Placement {
   linkedinUrl String?
   joiningDate DateTime?
   isPublished Boolean   @default(false)
+  // When true, the placement appears in the "Recently Placed Students" section
+  // of every course page in `courses`. Optional — not every placement is shown.
+  showOnCoursePage Boolean @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
+  // Course pages this placement is shown on (with showOnCoursePage).
+  courses Course[] @relation("CoursePlacements")
+
   @@index([isPublished])
+  @@index([showOnCoursePage])
   @@index([company])
   @@index([joiningDate])
   @@index([deletedAt])

@@ -81,10 +81,10 @@ export const TESTIMONIAL_SEED: Testimonial[] = [
 ]
 
 export const PLACEMENT_SEED: Placement[] = [
-  { id: 'plc_1', studentName: 'Ananya Sharma', company: 'Accenture', package: '12 LPA', course: 'SAP FICO', image: null, linkedinUrl: 'https://linkedin.com/in/ananya', joiningDate: daysAgo(38), isPublished: true, createdAt: daysAgo(39), updatedAt: daysAgo(38) },
-  { id: 'plc_2', studentName: 'Rahul Verma', company: 'Infosys', package: '10.5 LPA', course: 'SAP ABAP', image: null, linkedinUrl: 'https://linkedin.com/in/rahulv', joiningDate: daysAgo(33), isPublished: true, createdAt: daysAgo(34), updatedAt: daysAgo(33) },
-  { id: 'plc_3', studentName: 'Priya Nair', company: 'TCS', package: '9 LPA', course: 'SAP MM', image: null, linkedinUrl: null, joiningDate: daysAgo(20), isPublished: true, createdAt: daysAgo(21), updatedAt: daysAgo(20) },
-  { id: 'plc_4', studentName: 'Karan Mehta', company: 'Deloitte', package: '14 LPA', course: 'SAP FICO', image: null, linkedinUrl: 'https://linkedin.com/in/karanm', joiningDate: daysAgo(12), isPublished: true, createdAt: daysAgo(13), updatedAt: daysAgo(12) },
+  { id: 'plc_1', studentName: 'Ananya Sharma', company: 'Accenture', package: '12 LPA', course: 'SAP FICO', image: null, linkedinUrl: 'https://linkedin.com/in/ananya', joiningDate: daysAgo(38), isPublished: true, showOnCoursePage: false, courseIds: [], createdAt: daysAgo(39), updatedAt: daysAgo(38) },
+  { id: 'plc_2', studentName: 'Rahul Verma', company: 'Infosys', package: '10.5 LPA', course: 'SAP ABAP', image: null, linkedinUrl: 'https://linkedin.com/in/rahulv', joiningDate: daysAgo(33), isPublished: true, showOnCoursePage: false, courseIds: [], createdAt: daysAgo(34), updatedAt: daysAgo(33) },
+  { id: 'plc_3', studentName: 'Priya Nair', company: 'TCS', package: '9 LPA', course: 'SAP MM', image: null, linkedinUrl: null, joiningDate: daysAgo(20), isPublished: true, showOnCoursePage: false, courseIds: [], createdAt: daysAgo(21), updatedAt: daysAgo(20) },
+  { id: 'plc_4', studentName: 'Karan Mehta', company: 'Deloitte', package: '14 LPA', course: 'SAP FICO', image: null, linkedinUrl: 'https://linkedin.com/in/karanm', joiningDate: daysAgo(12), isPublished: true, showOnCoursePage: false, courseIds: [], createdAt: daysAgo(13), updatedAt: daysAgo(12) },
 ]
 
 export const FAQ_SEED: Faq[] = [

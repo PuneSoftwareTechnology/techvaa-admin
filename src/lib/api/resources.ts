@@ -310,10 +310,22 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       "linkedinUrl",
       "joiningDate",
       "isPublished",
+      "showOnCoursePage",
     ],
     nullableBlanks: ["package", "course", "image", "linkedinUrl", "joiningDate"],
     coerce: { joiningDate: "date" },
-    filters: { isPublished: { kind: "boolean" } },
+    // Course pages whose "Recently Placed Students" section shows this placement.
+    include: { courses: { select: { id: true, title: true, slug: true } } },
+    relations: { courses: "courseIds" },
+    // Expose the attached course ids as a flat array for the form's multi-select.
+    transform: (row) => {
+      const courses = (row.courses as { id: string }[] | undefined) ?? [];
+      return { ...row, courseIds: courses.map((c) => c.id) };
+    },
+    filters: {
+      isPublished: { kind: "boolean" },
+      showOnCoursePage: { kind: "boolean" },
+    },
   },
 
   faqs: {
